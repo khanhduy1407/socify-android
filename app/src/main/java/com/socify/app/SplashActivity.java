@@ -7,6 +7,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.socify.app.ui.LoginActivity;
+import com.socify.app.ui.MainActivity;
 
 public class SplashActivity extends AppCompatActivity {
 

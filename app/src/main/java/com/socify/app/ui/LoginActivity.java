@@ -1,4 +1,4 @@
-package com.socify.app;
+package com.socify.app.ui;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -22,6 +22,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.socify.app.R;
 
 public class LoginActivity extends AppCompatActivity {
 

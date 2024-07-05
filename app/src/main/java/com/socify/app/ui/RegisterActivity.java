@@ -1,4 +1,4 @@
-package com.socify.app;
+package com.socify.app.ui;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -20,6 +20,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.socify.app.R;
 
 import java.util.HashMap;
 

@@ -9,13 +9,16 @@
     android:supportsRtl="true"
     android:theme="@style/Theme.Socify">
     <activity
-      android:name=".RegisterActivity"
+      android:name=".ui.PostActivity"
       android:exported="true" />
     <activity
-      android:name=".LoginActivity"
+      android:name=".ui.RegisterActivity"
       android:exported="true" />
     <activity
-      android:name=".MainActivity"
+      android:name=".ui.LoginActivity"
+      android:exported="true" />
+    <activity
+      android:name=".ui.MainActivity"
       android:exported="true" />
     <activity
       android:name=".SplashActivity"
