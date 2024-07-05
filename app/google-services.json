@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "781702246845",
+    "firebase_url": "https://socify-bef22-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "socify-bef22",
+    "storage_bucket": "socify-bef22.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:781702246845:android:4879af716c861c98cb62d4",
+        "android_client_info": {
+          "package_name": "com.socify.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "781702246845-rrdd5h9drc8kfhd8d43e3tnmu47tri87.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDShCWaH2SK6R4hFqdjVTG7Iqxoy0lmfqw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "781702246845-rrdd5h9drc8kfhd8d43e3tnmu47tri87.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
