@@ -11,4 +11,6 @@
   <string name="search">Search...</string>
   <string name="following">Following</string>
   <string name="follow">Follow</string>
+  <string name="post">POST</string>
+  <string name="description">Description</string>
 </resources>
