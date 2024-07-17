@@ -164,7 +164,7 @@ public class ProfileFragment extends Fragment {
 
   private void getFollowers() {
     DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
-      .child("Follow").child(firebaseUser.getUid()).child("followers");
+      .child("Follow").child(profileId).child("followers");
 
     reference.addValueEventListener(new ValueEventListener() {
       @Override
@@ -180,7 +180,7 @@ public class ProfileFragment extends Fragment {
 
 
     DatabaseReference reference1 = FirebaseDatabase.getInstance().getReference()
-      .child("Follow").child(firebaseUser.getUid()).child("following");
+      .child("Follow").child(profileId).child("following");
 
     reference1.addValueEventListener(new ValueEventListener() {
       @Override
