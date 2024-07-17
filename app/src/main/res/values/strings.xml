@@ -14,4 +14,6 @@
   <string name="post">POST</string>
   <string name="description">Description</string>
   <string name="add_a_comment">Add a comment...</string>
+  <string name="posts">Posts</string>
+  <string name="followers">Followers</string>
 </resources>
