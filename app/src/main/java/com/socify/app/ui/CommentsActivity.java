@@ -11,6 +11,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
@@ -21,11 +23,19 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.socify.app.R;
+import com.socify.app.ui.adapters.CommentAdapter;
+import com.socify.app.ui.models.Comment;
 import com.socify.app.ui.models.User;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class CommentsActivity extends AppCompatActivity {
+
+  private RecyclerView recyclerView;
+  private CommentAdapter commentAdapter;
+  private List<Comment> commentList;
 
   EditText add_comment;
   ImageView image_profile;
@@ -41,6 +51,10 @@ public class CommentsActivity extends AppCompatActivity {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_comments);
 
+    Intent intent = getIntent();
+    postId = intent.getStringExtra("postId");
+    publisherId = intent.getStringExtra("publisherId");
+
     Toolbar toolbar = findViewById(R.id.toolbar);
     setSupportActionBar(toolbar);
     getSupportActionBar().setTitle("Comments");
@@ -52,15 +66,21 @@ public class CommentsActivity extends AppCompatActivity {
       }
     });
 
+    recyclerView = findViewById(R.id.recycler_view);
+    recyclerView.setHasFixedSize(true);
+    LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+    recyclerView.setLayoutManager(linearLayoutManager);
+    commentList = new ArrayList<>();
+    commentAdapter = new CommentAdapter(this, commentList);
+    recyclerView.setAdapter(commentAdapter);
+
+    readComments();
+
     add_comment = findViewById(R.id.add_comment);
     image_profile = findViewById(R.id.image_profile);
     post = findViewById(R.id.post);
 
     firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-
-    Intent intent = getIntent();
-    postId = intent.getStringExtra("postId");
-    publisherId = intent.getStringExtra("publisherId");
 
     post.setOnClickListener(new View.OnClickListener() {
       @Override
@@ -74,6 +94,28 @@ public class CommentsActivity extends AppCompatActivity {
     });
 
     getImage();
+  }
+
+  private void readComments() {
+    DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Comments").child(postId);
+
+    reference.addValueEventListener(new ValueEventListener() {
+      @Override
+      public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+        commentList.clear();
+        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+          Comment comment = snapshot.getValue(Comment.class);
+          commentList.add(comment);
+        }
+
+        commentAdapter.notifyDataSetChanged();
+      }
+
+      @Override
+      public void onCancelled(@NonNull DatabaseError error) {
+        //
+      }
+    });
   }
 
   private void addComment() {
