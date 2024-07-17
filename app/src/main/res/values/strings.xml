@@ -16,4 +16,5 @@
   <string name="add_a_comment">Add a comment...</string>
   <string name="posts">Posts</string>
   <string name="followers">Followers</string>
+  <string name="edit_profile">Edit Profile</string>
 </resources>
