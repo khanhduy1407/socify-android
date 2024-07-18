@@ -35,12 +35,14 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
 
   private Context mContext;
   private List<User> mUsers;
+  private boolean isFragment;
 
   private FirebaseUser firebaseUser;
 
-  public UserAdapter(Context mContext, List<User> mUsers) {
+  public UserAdapter(Context mContext, List<User> mUsers, boolean isFragment) {
     this.mContext = mContext;
     this.mUsers = mUsers;
+    this.isFragment = isFragment;
   }
 
   @NonNull
@@ -70,17 +72,18 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
     viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
-//        SharedPreferences.Editor editor = mContext.getSharedPreferences("PREFS", Context.MODE_PRIVATE).edit();
-//        editor.putString("profileId", user.getId());
-//        editor.apply();
-//
-//        ((FragmentActivity) mContext).getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-//          new ProfileFragment()).commit();
+        if (isFragment) {
+          SharedPreferences.Editor editor = mContext.getSharedPreferences("PREFS", Context.MODE_PRIVATE).edit();
+          editor.putString("profileId", user.getId());
+          editor.apply();
 
-        // FIXME (SOCIFY-001): remove below and use above when using FollowersActivity.
-        Intent intent = new Intent(mContext, MainActivity.class);
-        intent.putExtra("publisherId", user.getId());
-        mContext.startActivity(intent);
+          ((FragmentActivity) mContext).getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+            new ProfileFragment()).commit();
+        } else {
+          Intent intent = new Intent(mContext, MainActivity.class);
+          intent.putExtra("publisherId", user.getId());
+          mContext.startActivity(intent);
+        }
       }
     });
 
