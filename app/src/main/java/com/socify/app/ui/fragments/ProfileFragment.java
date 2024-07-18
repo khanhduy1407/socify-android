@@ -29,6 +29,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.socify.app.R;
 import com.socify.app.ui.EditProfileActivity;
+import com.socify.app.ui.FollowersActivity;
 import com.socify.app.ui.adapters.MyPhotoAdapter;
 import com.socify.app.ui.models.Post;
 import com.socify.app.ui.models.User;
@@ -104,6 +105,28 @@ public class ProfileFragment extends Fragment {
     getNrPosts();
     myPhotos();
     mySaves();
+
+    followers.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        Intent intent = new Intent(getContext(), FollowersActivity.class);
+        intent.putExtra("id", profileId);
+        intent.putExtra("title", getContext().getResources().getString(R.string.followers));
+        intent.putExtra("tag", "followers");
+        startActivity(intent);
+      }
+    });
+
+    following.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        Intent intent = new Intent(getContext(), FollowersActivity.class);
+        intent.putExtra("id", profileId);
+        intent.putExtra("title", getContext().getResources().getString(R.string.following));
+        intent.putExtra("tag", "following");
+        startActivity(intent);
+      }
+    });
 
     if (profileId.equals(firebaseUser.getUid())) {
       edit_profile.setText(getContext().getResources().getString(R.string.edit_profile));

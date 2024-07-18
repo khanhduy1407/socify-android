@@ -23,6 +23,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.socify.app.R;
 import com.socify.app.ui.CommentsActivity;
+import com.socify.app.ui.FollowersActivity;
 import com.socify.app.ui.fragments.PostDetailFragment;
 import com.socify.app.ui.fragments.ProfileFragment;
 import com.socify.app.ui.models.Post;
@@ -129,6 +130,17 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
           FirebaseDatabase.getInstance().getReference().child("Likes").child(post.getPostId())
             .child(firebaseUser.getUid()).removeValue();
         }
+      }
+    });
+
+    holder.likes.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        Intent intent = new Intent(mContext, FollowersActivity.class);
+        intent.putExtra("id", post.getPostId());
+        intent.putExtra("title", mContext.getResources().getString(R.string.likes));
+        intent.putExtra("tag", "likes");
+        mContext.startActivity(intent);
       }
     });
 

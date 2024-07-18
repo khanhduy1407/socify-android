@@ -1,6 +1,7 @@
 package com.socify.app.ui.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +22,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.socify.app.R;
+import com.socify.app.ui.MainActivity;
 import com.socify.app.ui.fragments.ProfileFragment;
 import com.socify.app.ui.models.User;
 
@@ -68,12 +70,17 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
     viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
-        SharedPreferences.Editor editor = mContext.getSharedPreferences("PREFS", Context.MODE_PRIVATE).edit();
-        editor.putString("profileId", user.getId());
-        editor.apply();
+//        SharedPreferences.Editor editor = mContext.getSharedPreferences("PREFS", Context.MODE_PRIVATE).edit();
+//        editor.putString("profileId", user.getId());
+//        editor.apply();
+//
+//        ((FragmentActivity) mContext).getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+//          new ProfileFragment()).commit();
 
-        ((FragmentActivity) mContext).getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-          new ProfileFragment()).commit();
+        // FIXME (SOCIFY-001): remove below and use above when using FollowersActivity.
+        Intent intent = new Intent(mContext, MainActivity.class);
+        intent.putExtra("publisherId", user.getId());
+        mContext.startActivity(intent);
       }
     });
 
