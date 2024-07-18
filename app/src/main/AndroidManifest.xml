@@ -12,6 +12,9 @@
     android:supportsRtl="true"
     android:theme="@style/Theme.Socify">
     <activity
+      android:name=".ui.EditProfileActivity"
+      android:exported="false" />
+    <activity
       android:name=".ui.CommentsActivity"
       android:exported="false" />
     <activity

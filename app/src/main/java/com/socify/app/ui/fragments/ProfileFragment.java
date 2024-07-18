@@ -1,6 +1,7 @@
 package com.socify.app.ui.fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
@@ -27,6 +28,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.socify.app.R;
+import com.socify.app.ui.EditProfileActivity;
 import com.socify.app.ui.adapters.MyPhotoAdapter;
 import com.socify.app.ui.models.Post;
 import com.socify.app.ui.models.User;
@@ -115,7 +117,7 @@ public class ProfileFragment extends Fragment {
         String btn = edit_profile.getText().toString();
 
         if (btn.equals(getContext().getResources().getString(R.string.edit_profile))) {
-          // go to EditProfile
+          startActivity(new Intent(getContext(), EditProfileActivity.class));
         } else if (btn.equals(getContext().getResources().getString(R.string.follow))) {
           // nút theo dõi
           FirebaseDatabase.getInstance().getReference().child("Follow").child(firebaseUser.getUid())
