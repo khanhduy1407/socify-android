@@ -24,6 +24,7 @@ import com.socify.app.R;
 import com.socify.app.ui.fragments.ProfileFragment;
 import com.socify.app.ui.models.User;
 
+import java.util.HashMap;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -84,6 +85,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
             .child("following").child(user.getId()).setValue(true);
           FirebaseDatabase.getInstance().getReference().child("Follow").child(user.getId())
             .child("followers").child(firebaseUser.getUid()).setValue(true);
+          addNotification(user.getId());
         } else {
           FirebaseDatabase.getInstance().getReference().child("Follow").child(firebaseUser.getUid())
             .child("following").child(user.getId()).removeValue();
@@ -134,5 +136,17 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
         //
       }
     });
+  }
+
+  private void addNotification(String userId) {
+    DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Notifications").child(userId);
+
+    HashMap<String, Object> hashMap = new HashMap<>();
+    hashMap.put("userId", firebaseUser.getUid());
+    hashMap.put("text", mContext.getResources().getString(R.string.started_following_you));
+    hashMap.put("postId", "");
+    hashMap.put("post", false);
+
+    reference.push().setValue(hashMap);
   }
 }

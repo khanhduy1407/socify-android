@@ -28,6 +28,7 @@ import com.socify.app.ui.fragments.ProfileFragment;
 import com.socify.app.ui.models.Post;
 import com.socify.app.ui.models.User;
 
+import java.util.HashMap;
 import java.util.List;
 
 public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
@@ -123,6 +124,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
         if (holder.like.getTag().equals("like")) {
           FirebaseDatabase.getInstance().getReference().child("Likes").child(post.getPostId())
             .child(firebaseUser.getUid()).setValue(true);
+          addNotification(post.getPublisher(), post.getPostId());
         } else {
           FirebaseDatabase.getInstance().getReference().child("Likes").child(post.getPostId())
             .child(firebaseUser.getUid()).removeValue();
@@ -290,5 +292,17 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
         //
       }
     });
+  }
+
+  private void addNotification(String userId, String postId) {
+    DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Notifications").child(userId);
+
+    HashMap<String, Object> hashMap = new HashMap<>();
+    hashMap.put("userId", firebaseUser.getUid());
+    hashMap.put("text", mContext.getResources().getString(R.string.liked_your_post));
+    hashMap.put("postId", postId);
+    hashMap.put("post", true);
+
+    reference.push().setValue(hashMap);
   }
 }

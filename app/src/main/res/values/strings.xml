@@ -21,4 +21,10 @@
   <string name="save">SAVE</string>
   <string name="change_photo">Change Photo</string>
   <string name="bio">Bio</string>
+  <!-- TODO: Remove or change this placeholder text -->
+  <string name="hello_blank_fragment">Hello blank fragment</string>
+  <string name="notifications">Notifications</string>
+  <string name="liked_your_post">Liked your post</string>
+  <string name="started_following_you">Started following you</string>
+  <string name="commented">Commented:</string>
 </resources>

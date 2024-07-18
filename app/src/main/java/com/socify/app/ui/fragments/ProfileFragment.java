@@ -35,6 +35,7 @@ import com.socify.app.ui.models.User;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
 public class ProfileFragment extends Fragment {
@@ -124,6 +125,7 @@ public class ProfileFragment extends Fragment {
             .child("following").child(profileId).setValue(true);
           FirebaseDatabase.getInstance().getReference().child("Follow").child(profileId)
             .child("followers").child(firebaseUser.getUid()).setValue(true);
+          addNotification();
         } else if (btn.equals(getContext().getResources().getString(R.string.following))) {
           // nút đang theo dõi
           FirebaseDatabase.getInstance().getReference().child("Follow").child(firebaseUser.getUid())
@@ -324,5 +326,17 @@ public class ProfileFragment extends Fragment {
         //
       }
     });
+  }
+
+  private void addNotification() {
+    DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Notifications").child(profileId);
+
+    HashMap<String, Object> hashMap = new HashMap<>();
+    hashMap.put("userId", firebaseUser.getUid());
+    hashMap.put("text", getContext().getResources().getString(R.string.started_following_you));
+    hashMap.put("postId", "");
+    hashMap.put("post", false);
+
+    reference.push().setValue(hashMap);
   }
 }
