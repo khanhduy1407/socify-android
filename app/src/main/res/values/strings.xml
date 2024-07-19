@@ -28,4 +28,7 @@
   <string name="started_following_you">Started following you</string>
   <string name="commented">Commented:</string>
   <string name="likes">Likes</string>
+  <string name="settings">Settings</string>
+  <string name="logout">Logout</string>
+  <string name="options">Options</string>
 </resources>

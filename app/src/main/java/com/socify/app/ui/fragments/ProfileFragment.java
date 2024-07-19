@@ -30,6 +30,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.socify.app.R;
 import com.socify.app.ui.EditProfileActivity;
 import com.socify.app.ui.FollowersActivity;
+import com.socify.app.ui.OptionsActivity;
 import com.socify.app.ui.adapters.MyPhotoAdapter;
 import com.socify.app.ui.models.Post;
 import com.socify.app.ui.models.User;
@@ -105,6 +106,14 @@ public class ProfileFragment extends Fragment {
     getNrPosts();
     myPhotos();
     mySaves();
+
+    options.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        Intent intent = new Intent(getContext(), OptionsActivity.class);
+        startActivity(intent);
+      }
+    });
 
     followers.setOnClickListener(new View.OnClickListener() {
       @Override
