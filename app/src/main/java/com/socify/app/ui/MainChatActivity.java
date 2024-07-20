@@ -76,7 +76,7 @@ public class MainChatActivity extends AppCompatActivity {
 
     ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
     viewPagerAdapter.addFragment(new ChatsFragment(), getResources().getString(R.string.chats));
-    viewPagerAdapter.addFragment(new PeopleFragment(), getResources().getString(R.string.friends));
+    viewPagerAdapter.addFragment(new PeopleFragment(), getResources().getString(R.string.people));
 
     viewPager.setAdapter(viewPagerAdapter);
     tabLayout.setupWithViewPager(viewPager);
