@@ -33,4 +33,5 @@
   <string name="options">Options</string>
   <string name="my_story">My Story</string>
   <string name="add_story">Add Story</string>
+  <string name="view_story">View story</string>
 </resources>
