@@ -1,6 +1,7 @@
 package com.socify.app.ui.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.socify.app.R;
+import com.socify.app.ui.MessageActivity;
 import com.socify.app.ui.models.User;
 
 import java.util.List;
@@ -38,6 +40,15 @@ public class UserChatAdapter extends RecyclerView.Adapter<UserChatAdapter.ViewHo
     User user = mUsers.get(position);
     holder.fullname.setText(user.getFullname());
     Glide.with(mContext).load(user.getImageUrl()).into(holder.profile_image);
+
+    holder.itemView.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        Intent intent = new Intent(mContext, MessageActivity.class);
+        intent.putExtra("userId", user.getId());
+        mContext.startActivity(intent);
+      }
+    });
   }
 
   @Override
