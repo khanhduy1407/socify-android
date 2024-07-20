@@ -32,4 +32,5 @@
   <string name="my_story">My Story</string>
   <string name="add_story">Add Story</string>
   <string name="view_story">View story</string>
+  <string name="views">Views</string>
 </resources>

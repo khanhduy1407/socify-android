@@ -67,5 +67,45 @@
       android:textColor="#fff" />
 
   </RelativeLayout>
+  
+  <LinearLayout
+    android:id="@+id/r_seen"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_alignParentBottom="true"
+    android:layout_margin="10dp"
+    android:padding="3dp"
+    android:orientation="horizontal"
+    android:background="#20000000">
+
+    <ImageView
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center"
+      android:src="@drawable/ic_eye_white" />
+
+    <TextView
+      android:id="@+id/seen_number"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="5dp"
+      android:layout_gravity="center"
+      android:text="0"
+      android:textSize="16sp"
+      android:textStyle="bold"
+      android:textColor="#fff" />
+
+  </LinearLayout>
+  
+  <ImageView
+    android:id="@+id/story_delete"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_alignParentBottom="true"
+    android:layout_alignParentEnd="true"
+    android:layout_margin="10dp"
+    android:padding="3dp"
+    android:background="#20000000"
+    android:src="@drawable/ic_story_delete_white" />
 
 </RelativeLayout>

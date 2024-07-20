@@ -74,6 +74,9 @@ public class FollowersActivity extends AppCompatActivity {
       case "followers":
         getFollowers();
         break;
+      case "story_views":
+        getStoryViews();
+        break;
     }
   }
 
@@ -121,6 +124,26 @@ public class FollowersActivity extends AppCompatActivity {
     DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Follow")
       .child(id).child("followers");
     reference.addValueEventListener(new ValueEventListener() {
+      @Override
+      public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+        idList.clear();
+        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+          idList.add(snapshot.getKey());
+        }
+        showUsers();
+      }
+
+      @Override
+      public void onCancelled(@NonNull DatabaseError error) {
+        //
+      }
+    });
+  }
+
+  private void getStoryViews() {
+    DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Stories")
+      .child(id).child(getIntent().getStringExtra("storyId")).child("views");
+    reference.addListenerForSingleValueEvent(new ValueEventListener() {
       @Override
       public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
         idList.clear();
