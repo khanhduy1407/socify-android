@@ -9,6 +9,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.socify.app.ui.LoginActivity;
 import com.socify.app.ui.MainActivity;
+import com.socify.app.ui.MainChatActivity;
 
 public class SplashActivity extends AppCompatActivity {
 
@@ -24,7 +25,8 @@ public class SplashActivity extends AppCompatActivity {
 
     // redirect to home page if user is not null
     if (firebaseUser != null) {
-      mainIntent = new Intent(this, MainActivity.class);
+//      mainIntent = new Intent(this, MainActivity.class);
+      mainIntent = new Intent(this, MainChatActivity.class);
     } else {
       mainIntent = new Intent(this, LoginActivity.class);
     }
