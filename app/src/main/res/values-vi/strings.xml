@@ -33,4 +33,12 @@
   <string name="add_story">Add Story</string>
   <string name="view_story">View story</string>
   <string name="views">Views</string>
+  <string name="edit">Edit</string>
+  <string name="delete">Delete</string>
+  <string name="edit_post">Edit Post</string>
+  <string name="cancel">Cancel</string>
+  <string name="report">Report</string>
+  <string name="do_you_want_to_delete">Do you want to delete?</string>
+  <string name="no">No</string>
+  <string name="yes">Yes</string>
 </resources>

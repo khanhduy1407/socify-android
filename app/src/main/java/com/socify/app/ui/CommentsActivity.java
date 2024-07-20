@@ -71,7 +71,7 @@ public class CommentsActivity extends AppCompatActivity {
     LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
     recyclerView.setLayoutManager(linearLayoutManager);
     commentList = new ArrayList<>();
-    commentAdapter = new CommentAdapter(this, commentList);
+    commentAdapter = new CommentAdapter(this, commentList, postId);
     recyclerView.setAdapter(commentAdapter);
 
     readComments();
@@ -121,11 +121,14 @@ public class CommentsActivity extends AppCompatActivity {
   private void addComment() {
     DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Comments").child(postId);
 
+    String commentId = reference.push().getKey();
+
     HashMap<String, Object> hashMap = new HashMap<>();
+    hashMap.put("commentId", commentId);
     hashMap.put("comment", add_comment.getText().toString());
     hashMap.put("publisher", firebaseUser.getUid());
 
-    reference.push().setValue(hashMap);
+    reference.child(commentId).setValue(hashMap);
     addNotification();
     add_comment.setText("");
   }
