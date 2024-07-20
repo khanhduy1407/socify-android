@@ -27,7 +27,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.socify.app.R;
 import com.socify.app.SplashActivity;
 import com.socify.app.ui.fragments.ChatsFragment;
-import com.socify.app.ui.fragments.FriendsFragment;
+import com.socify.app.ui.fragments.PeopleFragment;
 import com.socify.app.ui.models.User;
 
 import java.util.ArrayList;
@@ -76,7 +76,7 @@ public class MainChatActivity extends AppCompatActivity {
 
     ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
     viewPagerAdapter.addFragment(new ChatsFragment(), getResources().getString(R.string.chats));
-    viewPagerAdapter.addFragment(new FriendsFragment(), getResources().getString(R.string.friends));
+    viewPagerAdapter.addFragment(new PeopleFragment(), getResources().getString(R.string.friends));
 
     viewPager.setAdapter(viewPagerAdapter);
     tabLayout.setupWithViewPager(viewPager);
