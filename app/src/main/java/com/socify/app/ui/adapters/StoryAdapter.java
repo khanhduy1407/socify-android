@@ -22,6 +22,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.socify.app.R;
 import com.socify.app.ui.AddStoryActivity;
+import com.socify.app.ui.StoryActivity;
 import com.socify.app.ui.models.Story;
 import com.socify.app.ui.models.User;
 
@@ -69,7 +70,9 @@ public class StoryAdapter extends RecyclerView.Adapter<StoryAdapter.ViewHolder> 
         if (holder.getAdapterPosition() == 0) {
           myStory(holder.add_story_text, holder.story_plus, true);
         } else {
-          // TODO: go to story
+          Intent intent = new Intent(mContext, StoryActivity.class);
+          intent.putExtra("userId", story.getUserId());
+          mContext.startActivity(intent);
         }
       }
     });
@@ -113,7 +116,7 @@ public class StoryAdapter extends RecyclerView.Adapter<StoryAdapter.ViewHolder> 
         Glide.with(mContext).load(user.getImageUrl()).into(viewHolder.story_photo);
         if (pos != 0) {
           Glide.with(mContext).load(user.getImageUrl()).into(viewHolder.story_photo_seen);
-          viewHolder.story_username.setText(user.getUsername());
+          viewHolder.story_username.setText("@"+user.getUsername());
         }
       }
 
@@ -146,7 +149,10 @@ public class StoryAdapter extends RecyclerView.Adapter<StoryAdapter.ViewHolder> 
               new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                  // TODO: go to story
+                  Intent intent = new Intent(mContext, StoryActivity.class);
+                  intent.putExtra("userId", FirebaseAuth.getInstance().getCurrentUser().getUid());
+                  mContext.startActivity(intent);
+                  dialog.dismiss();
                 }
               });
             alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, mContext.getResources().getString(R.string.add_story),
