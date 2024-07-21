@@ -7,13 +7,15 @@ public class User {
   private String fullname;
   private String imageUrl;
   private String bio;
+  private String status;
 
-  public User(String id, String username, String fullname, String imageUrl, String bio) {
+  public User(String id, String username, String fullname, String imageUrl, String bio, String status) {
     this.id = id;
     this.username = username;
     this.fullname = fullname;
     this.imageUrl = imageUrl;
     this.bio = bio;
+    this.status = status;
   }
 
   public User () { }
@@ -56,5 +58,13 @@ public class User {
 
   public void setBio(String bio) {
     this.bio = bio;
+  }
+
+  public String getStatus() {
+    return status;
+  }
+
+  public void setStatus(String status) {
+    this.status = status;
   }
 }

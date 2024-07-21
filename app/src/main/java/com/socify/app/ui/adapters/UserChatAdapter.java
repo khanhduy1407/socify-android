@@ -22,10 +22,12 @@ public class UserChatAdapter extends RecyclerView.Adapter<UserChatAdapter.ViewHo
 
   private Context mContext;
   private List<User> mUsers;
+  private boolean isChat;
 
-  public UserChatAdapter(Context mContext, List<User> mUsers) {
+  public UserChatAdapter(Context mContext, List<User> mUsers, boolean isChat) {
     this.mContext = mContext;
     this.mUsers = mUsers;
+    this.isChat = isChat;
   }
 
   @NonNull
@@ -40,6 +42,19 @@ public class UserChatAdapter extends RecyclerView.Adapter<UserChatAdapter.ViewHo
     User user = mUsers.get(position);
     holder.fullname.setText(user.getFullname());
     Glide.with(mContext).load(user.getImageUrl()).into(holder.profile_image);
+
+    if (isChat) {
+      if (user.getStatus() != null && user.getStatus().equals("online")) {
+        holder.img_on.setVisibility(View.VISIBLE);
+        holder.img_off.setVisibility(View.GONE);
+      } else {
+        holder.img_on.setVisibility(View.GONE);
+        holder.img_off.setVisibility(View.VISIBLE);
+      }
+    } else {
+      holder.img_on.setVisibility(View.GONE);
+      holder.img_off.setVisibility(View.GONE);
+    }
 
     holder.itemView.setOnClickListener(new View.OnClickListener() {
       @Override
@@ -58,7 +73,7 @@ public class UserChatAdapter extends RecyclerView.Adapter<UserChatAdapter.ViewHo
 
   public class ViewHolder extends RecyclerView.ViewHolder {
 
-    public ImageView profile_image;
+    public ImageView profile_image, img_on, img_off;
     public TextView fullname;
 
     public ViewHolder(@NonNull View itemView) {
@@ -66,6 +81,8 @@ public class UserChatAdapter extends RecyclerView.Adapter<UserChatAdapter.ViewHo
 
       profile_image = itemView.findViewById(R.id.profile_image);
       fullname = itemView.findViewById(R.id.fullname);
+      img_on = itemView.findViewById(R.id.img_on);
+      img_off = itemView.findViewById(R.id.img_off);
     }
   }
 }
