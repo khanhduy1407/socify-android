@@ -47,4 +47,6 @@
   <string name="people">People</string>
   <string name="type_a_message">Type a message...</string>
   <string name="message">Message</string>
+  <string name="seen">Seen</string>
+  <string name="delivered">Delivered</string>
 </resources>

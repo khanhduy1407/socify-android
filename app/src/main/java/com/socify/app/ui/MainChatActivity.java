@@ -63,7 +63,7 @@ public class MainChatActivity extends AppCompatActivity {
       public void onDataChange(@NonNull DataSnapshot snapshot) {
         User user = snapshot.getValue(User.class);
         fullname.setText(user.getFullname());
-        Glide.with(MainChatActivity.this).load(user.getImageUrl()).into(profile_image);
+        Glide.with(getApplicationContext()).load(user.getImageUrl()).into(profile_image);
       }
 
       @Override
