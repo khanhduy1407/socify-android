@@ -96,6 +96,7 @@ public class RegisterActivity extends AppCompatActivity {
             hashMap.put("fullname", fullname);
             hashMap.put("bio", "");
             hashMap.put("imageUrl", "https://firebasestorage.googleapis.com/v0/b/socify-bef22.appspot.com/o/placeholder.png?alt=media&token=b6ea72a3-7dde-4e2d-ba56-9fe9db5b3a98");
+            hashMap.put("status", "offline");
 
             reference.setValue(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
               @Override
