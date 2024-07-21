@@ -44,4 +44,5 @@
   <string name="chats">Chats</string>
   <string name="people">People</string>
   <string name="type_a_message">Type a message...</string>
+  <string name="message">Message</string>
 </resources>

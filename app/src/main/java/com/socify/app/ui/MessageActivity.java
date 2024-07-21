@@ -10,6 +10,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
@@ -20,9 +22,13 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.socify.app.R;
+import com.socify.app.ui.adapters.MessageAdapter;
+import com.socify.app.ui.models.Chat;
 import com.socify.app.ui.models.User;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -33,6 +39,11 @@ public class MessageActivity extends AppCompatActivity {
 
   EditText text_send;
   ImageButton btn_send;
+
+  MessageAdapter messageAdapter;
+  List<Chat> mChats;
+
+  RecyclerView recyclerView;
 
   FirebaseUser fUser;
   DatabaseReference reference;
@@ -54,6 +65,12 @@ public class MessageActivity extends AppCompatActivity {
         finish();
       }
     });
+
+    recyclerView = findViewById(R.id.recycler_view);
+    recyclerView.setHasFixedSize(true);
+    LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
+    linearLayoutManager.setStackFromEnd(true);
+    recyclerView.setLayoutManager(linearLayoutManager);
 
     profile_image = findViewById(R.id.profile_image);
     fullname = findViewById(R.id.fullname);
@@ -85,6 +102,8 @@ public class MessageActivity extends AppCompatActivity {
         User user = snapshot.getValue(User.class);
         fullname.setText(user.getFullname());
         Glide.with(getApplicationContext()).load(user.getImageUrl()).into(profile_image);
+
+        readMessages(fUser.getUid(), userId, user.getImageUrl());
       }
 
       @Override
@@ -103,5 +122,32 @@ public class MessageActivity extends AppCompatActivity {
     hashMap.put("message", message);
 
     reference.child("Chats").push().setValue(hashMap);
+  }
+
+  private void readMessages(String myId, String userId, String imageUrl) {
+    mChats = new ArrayList<>();
+
+    reference = FirebaseDatabase.getInstance().getReference("Chats");
+    reference.addValueEventListener(new ValueEventListener() {
+      @Override
+      public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+        mChats.clear();
+        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+          Chat chat = snapshot.getValue(Chat.class);
+          if (chat.getReceiver().equals(myId) && chat.getSender().equals(userId) ||
+              chat.getReceiver().equals(userId) && chat.getSender().equals(myId)) {
+            mChats.add(chat);
+          }
+        }
+
+        messageAdapter = new MessageAdapter(MessageActivity.this, mChats, imageUrl);
+        recyclerView.setAdapter(messageAdapter);
+      }
+
+      @Override
+      public void onCancelled(@NonNull DatabaseError error) {
+        //
+      }
+    });
   }
 }
