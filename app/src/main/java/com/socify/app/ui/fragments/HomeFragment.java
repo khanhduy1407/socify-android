@@ -1,5 +1,6 @@
 package com.socify.app.ui.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -10,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -19,6 +21,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.socify.app.R;
+import com.socify.app.ui.MainActivity;
+import com.socify.app.ui.MainChatActivity;
+import com.socify.app.ui.PostActivity;
 import com.socify.app.ui.adapters.PostAdapter;
 import com.socify.app.ui.adapters.StoryAdapter;
 import com.socify.app.ui.models.Post;
@@ -28,6 +33,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class HomeFragment extends Fragment {
+
+  ImageView add_post, open_chat;
 
   private RecyclerView recyclerView;
   private PostAdapter postAdapter;
@@ -45,6 +52,23 @@ public class HomeFragment extends Fragment {
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
                            Bundle savedInstanceState) {
     View view = inflater.inflate(R.layout.fragment_home, container, false);
+
+    add_post = view.findViewById(R.id.add_post);
+    open_chat = view.findViewById(R.id.open_chat);
+
+    add_post.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        startActivity(new Intent(getContext(), PostActivity.class));
+      }
+    });
+
+    open_chat.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        startActivity(new Intent(getContext(), MainChatActivity.class));
+      }
+    });
 
     recyclerView = view.findViewById(R.id.recycler_view);
     recyclerView.setHasFixedSize(true);

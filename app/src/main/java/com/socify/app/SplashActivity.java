@@ -25,8 +25,7 @@ public class SplashActivity extends AppCompatActivity {
 
     // redirect to home page if user is not null
     if (firebaseUser != null) {
-//      mainIntent = new Intent(this, MainActivity.class);
-      mainIntent = new Intent(this, MainChatActivity.class);
+      mainIntent = new Intent(this, MainActivity.class);
     } else {
       mainIntent = new Intent(this, LoginActivity.class);
     }
