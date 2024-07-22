@@ -51,4 +51,5 @@
   <string name="reset">Reset</string>
   <string name="by_clicking_reset_you_will_receive_an_email_to_reset_your_password">By clicking RESET, you will receive an email to reset your password</string>
   <string name="reset_password">Reset Password</string>
+  <string name="no_message">No Message</string>
 </resources>

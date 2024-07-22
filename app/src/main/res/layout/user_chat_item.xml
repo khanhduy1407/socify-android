@@ -42,5 +42,17 @@
     android:layout_toEndOf="@id/profile_image"
     android:background="@drawable/ic_offline"
     android:visibility="gone" />
+  
+  <TextView
+    android:id="@+id/last_msg"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_below="@id/fullname"
+    android:layout_toEndOf="@id/profile_image"
+    android:paddingTop="5dp"
+    android:layout_marginTop="5dp"
+    android:layout_marginStart="20dp"
+    android:textColor="@color/black"
+    android:maxLines="1" />
 
 </RelativeLayout>
