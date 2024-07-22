@@ -20,7 +20,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.socify.app.R;
 import com.socify.app.ui.adapters.UserChatAdapter;
-import com.socify.app.ui.models.Chat;
+import com.socify.app.ui.models.ChatList;
 import com.socify.app.ui.models.User;
 
 import java.util.ArrayList;
@@ -36,7 +36,7 @@ public class ChatsFragment extends Fragment {
   FirebaseUser fUser;
   DatabaseReference reference;
 
-  private List<String> usersList;
+  private List<ChatList> usersList;
 
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -51,23 +51,17 @@ public class ChatsFragment extends Fragment {
 
     usersList = new ArrayList<>();
 
-    reference = FirebaseDatabase.getInstance().getReference("Chats");
+    reference = FirebaseDatabase.getInstance().getReference("ChatList").child(fUser.getUid());
     reference.addValueEventListener(new ValueEventListener() {
       @Override
       public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
         usersList.clear();
         for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-          Chat chat = snapshot.getValue(Chat.class);
-
-          if (chat.getSender().equals(fUser.getUid())) {
-            usersList.add(chat.getReceiver());
-          }
-          if (chat.getReceiver().equals(fUser.getUid())) {
-            usersList.add(chat.getSender());
-          }
+          ChatList chatList = snapshot.getValue(ChatList.class);
+          usersList.add(chatList);
         }
 
-        readChats();
+        chatList();
       }
 
       @Override
@@ -79,34 +73,21 @@ public class ChatsFragment extends Fragment {
     return view;
   }
 
-  private void readChats() {
+  private void chatList() {
     mUsers = new ArrayList<>();
-
     reference = FirebaseDatabase.getInstance().getReference("Users");
     reference.addValueEventListener(new ValueEventListener() {
       @Override
       public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
         mUsers.clear();
-
         for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
           User user = snapshot.getValue(User.class);
-
-          // display 1 user from chats
-          for (String id : usersList) {
-            if (user.getId().equals(id)) {
-              if (mUsers.size() != 0) {
-                for (User user1 : mUsers) {
-                  if (!user.getId().equals(user1.getId())) {
-                    mUsers.add(user);
-                  }
-                }
-              } else {
-                mUsers.add(user);
-              }
+          for (ChatList chatList : usersList) {
+            if (user.getId().equals(chatList.getId())) {
+              mUsers.add(user);
             }
           }
         }
-
         userChatAdapter = new UserChatAdapter(getContext(), mUsers, true);
         recyclerView.setAdapter(userChatAdapter);
       }
