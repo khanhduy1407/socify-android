@@ -93,7 +93,7 @@ public class MainChatActivity extends AppCompatActivity {
         if (unread == 0) {
           viewPagerAdapter.addFragment(new ChatsFragment(), getResources().getString(R.string.chats));
         } else {
-          viewPagerAdapter.addFragment(new ChatsFragment(), getResources().getString(R.string.chats) + "(" + unread +")");
+          viewPagerAdapter.addFragment(new ChatsFragment(), getResources().getString(R.string.chats) + " (" + unread +")");
         }
 
         viewPagerAdapter.addFragment(new PeopleFragment(), getResources().getString(R.string.people));
