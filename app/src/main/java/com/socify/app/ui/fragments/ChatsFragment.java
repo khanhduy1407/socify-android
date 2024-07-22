@@ -11,6 +11,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -18,7 +20,10 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.socify.app.R;
+import com.socify.app.fcm.AccessToken;
+import com.socify.app.notifications.Token;
 import com.socify.app.ui.adapters.UserChatAdapter;
 import com.socify.app.ui.models.ChatList;
 import com.socify.app.ui.models.User;
@@ -70,7 +75,18 @@ public class ChatsFragment extends Fragment {
       }
     });
 
+    AccessToken accessToken = new AccessToken();
+
+    final String token = accessToken.getAccessToken();
+    updateToken(token);
+
     return view;
+  }
+
+  private void updateToken(String token) {
+    DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Tokens");
+    Token token1 = new Token(token);
+    reference.child(fUser.getUid()).setValue(token1);
   }
 
   private void chatList() {
