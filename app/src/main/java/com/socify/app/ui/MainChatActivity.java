@@ -28,6 +28,7 @@ import com.socify.app.R;
 import com.socify.app.SplashActivity;
 import com.socify.app.ui.fragments.ChatsFragment;
 import com.socify.app.ui.fragments.PeopleFragment;
+import com.socify.app.ui.models.Chat;
 import com.socify.app.ui.models.User;
 
 import java.util.ArrayList;
@@ -72,15 +73,40 @@ public class MainChatActivity extends AppCompatActivity {
       }
     });
 
-    TabLayout tabLayout = findViewById(R.id.tab_layout);
-    ViewPager viewPager = findViewById(R.id.view_pager);
+    final TabLayout tabLayout = findViewById(R.id.tab_layout);
+    final ViewPager viewPager = findViewById(R.id.view_pager);
 
-    ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
-    viewPagerAdapter.addFragment(new ChatsFragment(), getResources().getString(R.string.chats));
-    viewPagerAdapter.addFragment(new PeopleFragment(), getResources().getString(R.string.people));
+    reference = FirebaseDatabase.getInstance().getReference("Chats");
+    reference.addValueEventListener(new ValueEventListener() {
+      @Override
+      public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+        ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
 
-    viewPager.setAdapter(viewPagerAdapter);
-    tabLayout.setupWithViewPager(viewPager);
+        int unread = 0;
+        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+          Chat chat = snapshot.getValue(Chat.class);
+          if (chat.getReceiver().equals(firebaseUser.getUid()) && !chat.isSeen()) {
+            unread++;
+          }
+        }
+
+        if (unread == 0) {
+          viewPagerAdapter.addFragment(new ChatsFragment(), getResources().getString(R.string.chats));
+        } else {
+          viewPagerAdapter.addFragment(new ChatsFragment(), getResources().getString(R.string.chats) + "(" + unread +")");
+        }
+
+        viewPagerAdapter.addFragment(new PeopleFragment(), getResources().getString(R.string.people));
+
+        viewPager.setAdapter(viewPagerAdapter);
+        tabLayout.setupWithViewPager(viewPager);
+      }
+
+      @Override
+      public void onCancelled(@NonNull DatabaseError error) {
+        //
+      }
+    });
   }
 
   @Override
