@@ -12,29 +12,33 @@
     android:supportsRtl="true"
     android:theme="@style/Theme.Socify">
     <activity
+      android:name=".ui.ResetPasswordActivity"
+      android:parentActivityName=".ui.LoginActivity"
+      android:exported="true" />
+    <activity
       android:name=".ui.MessageActivity"
-      android:exported="false" />
+      android:exported="true" />
     <activity
       android:name=".ui.MainChatActivity"
-      android:exported="false" />
+      android:exported="true" />
     <activity
       android:name=".ui.StoryActivity"
-      android:exported="false" />
+      android:exported="true" />
     <activity
       android:name=".ui.AddStoryActivity"
-      android:exported="false" />
+      android:exported="true" />
     <activity
       android:name=".ui.OptionsActivity"
-      android:exported="false" />
+      android:exported="true" />
     <activity
       android:name=".ui.FollowersActivity"
-      android:exported="false" />
+      android:exported="true" />
     <activity
       android:name=".ui.EditProfileActivity"
-      android:exported="false" />
+      android:exported="true" />
     <activity
       android:name=".ui.CommentsActivity"
-      android:exported="false" />
+      android:exported="true" />
     <activity
       android:name=".ui.PostActivity"
       android:exported="true" />
