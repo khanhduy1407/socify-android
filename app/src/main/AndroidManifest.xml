@@ -12,9 +12,13 @@
     android:supportsRtl="true"
     android:theme="@style/Theme.Socify">
     <activity
+      android:name=".ui.SettingsActivity"
+      android:exported="true"
+      android:parentActivityName=".ui.OptionsActivity" />
+    <activity
       android:name=".ui.ResetPasswordActivity"
-      android:parentActivityName=".ui.LoginActivity"
-      android:exported="true" />
+      android:exported="true"
+      android:parentActivityName=".ui.LoginActivity" />
     <activity
       android:name=".ui.MessageActivity"
       android:exported="true" />

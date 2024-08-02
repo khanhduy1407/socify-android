@@ -52,4 +52,6 @@
   <string name="by_clicking_reset_you_will_receive_an_email_to_reset_your_password">Bằng cách nhấp vào ĐẶT LẠI, bạn sẽ nhận được email để đặt lại mật khẩu của mình</string>
   <string name="reset_password">Đặt lại mật khẩu</string>
   <string name="no_message">Không có tin nhắn</string>
+  <string name="pref_general_title">Cài đặt chung</string>
+  <string name="pref_language">Ngôn ngữ</string>
 </resources>

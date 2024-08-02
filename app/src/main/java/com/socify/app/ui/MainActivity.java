@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.socify.app.R;
+import com.socify.app.helpers.LocaleHelper;
 import com.socify.app.ui.fragments.HomeFragment;
 import com.socify.app.ui.fragments.NotificationsFragment;
 import com.socify.app.ui.fragments.ProfileFragment;
@@ -24,6 +25,8 @@ public class MainActivity extends AppCompatActivity {
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
+    LocaleHelper.applyLocale(MainActivity.this);
+
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
 
