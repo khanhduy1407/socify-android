@@ -27,6 +27,8 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
 import com.socify.app.R;
+import com.socify.app.models.Post;
+import com.socify.app.utils.SocifyUtils;
 import com.theartofdev.edmodo.cropper.CropImage;
 
 import java.util.HashMap;
@@ -52,7 +54,7 @@ public class PostActivity extends AppCompatActivity {
     post = findViewById(R.id.post);
     description = findViewById(R.id.description);
 
-    storageReference = FirebaseStorage.getInstance().getReference("posts");
+    storageReference = FirebaseStorage.getInstance().getReference(Post.POSTS_STORAGE);
 
     close.setOnClickListener(new View.OnClickListener() {
       @Override
@@ -106,15 +108,15 @@ public class PostActivity extends AppCompatActivity {
             Uri downloadUri = task.getResult();
             myUrl = downloadUri.toString();
 
-            DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Posts");
+            DatabaseReference reference = FirebaseDatabase.getInstance().getReference(Post.POSTS_DB);
 
             String postId = reference.push().getKey();
 
             HashMap<String, Object> hashMap = new HashMap<>();
-            hashMap.put("postId", postId);
-            hashMap.put("postImage", myUrl);
-            hashMap.put("description", description.getText().toString());
-            hashMap.put("publisher", FirebaseAuth.getInstance().getCurrentUser().getUid());
+            hashMap.put(SocifyUtils.EXTRA_POST_ID, postId);
+            hashMap.put(SocifyUtils.EXTRA_POST_IMAGE, myUrl);
+            hashMap.put(SocifyUtils.EXTRA_DESCRIPTION, description.getText().toString());
+            hashMap.put(SocifyUtils.EXTRA_PUBLISHER, FirebaseAuth.getInstance().getCurrentUser().getUid());
 
             reference.child(postId).setValue(hashMap);
 

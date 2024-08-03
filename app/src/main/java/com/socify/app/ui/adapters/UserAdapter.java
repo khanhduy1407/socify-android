@@ -22,9 +22,11 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.socify.app.R;
+import com.socify.app.models.Notification;
 import com.socify.app.ui.MainActivity;
 import com.socify.app.ui.fragments.ProfileFragment;
-import com.socify.app.ui.models.User;
+import com.socify.app.models.User;
+import com.socify.app.utils.SocifyUtils;
 
 import java.util.HashMap;
 import java.util.List;
@@ -73,15 +75,15 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
       @Override
       public void onClick(View v) {
         if (isFragment) {
-          SharedPreferences.Editor editor = mContext.getSharedPreferences("PREFS", Context.MODE_PRIVATE).edit();
-          editor.putString("profileId", user.getId());
+          SharedPreferences.Editor editor = mContext.getSharedPreferences(SocifyUtils.PREFS, Context.MODE_PRIVATE).edit();
+          editor.putString(SocifyUtils.EXTRA_PROFILE_ID, user.getId());
           editor.apply();
 
           ((FragmentActivity) mContext).getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
             new ProfileFragment()).commit();
         } else {
           Intent intent = new Intent(mContext, MainActivity.class);
-          intent.putExtra("publisherId", user.getId());
+          intent.putExtra(SocifyUtils.EXTRA_PUBLISHER_ID, user.getId());
           mContext.startActivity(intent);
         }
       }
@@ -91,15 +93,15 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
       @Override
       public void onClick(View v) {
         if (viewHolder.btn_follow.getText().toString().equals(mContext.getResources().getString(R.string.follow))) {
-          FirebaseDatabase.getInstance().getReference().child("Follow").child(firebaseUser.getUid())
+          FirebaseDatabase.getInstance().getReference().child(User.FOLLOW_DB).child(firebaseUser.getUid())
             .child("following").child(user.getId()).setValue(true);
-          FirebaseDatabase.getInstance().getReference().child("Follow").child(user.getId())
+          FirebaseDatabase.getInstance().getReference().child(User.FOLLOW_DB).child(user.getId())
             .child("followers").child(firebaseUser.getUid()).setValue(true);
           addNotification(user.getId());
         } else {
-          FirebaseDatabase.getInstance().getReference().child("Follow").child(firebaseUser.getUid())
+          FirebaseDatabase.getInstance().getReference().child(User.FOLLOW_DB).child(firebaseUser.getUid())
             .child("following").child(user.getId()).removeValue();
-          FirebaseDatabase.getInstance().getReference().child("Follow").child(user.getId())
+          FirebaseDatabase.getInstance().getReference().child(User.FOLLOW_DB).child(user.getId())
             .child("followers").child(firebaseUser.getUid()).removeValue();
         }
       }
@@ -130,7 +132,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
 
   private void isFollowing(String userId, Button button) {
     DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
-      .child("Follow").child(firebaseUser.getUid()).child("following");
+      .child(User.FOLLOW_DB).child(firebaseUser.getUid()).child("following");
     reference.addValueEventListener(new ValueEventListener() {
       @Override
       public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -149,13 +151,13 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
   }
 
   private void addNotification(String userId) {
-    DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Notifications").child(userId);
+    DatabaseReference reference = FirebaseDatabase.getInstance().getReference(Notification.NOTIFICATIONS_DB).child(userId);
 
     HashMap<String, Object> hashMap = new HashMap<>();
-    hashMap.put("userId", firebaseUser.getUid());
-    hashMap.put("text", mContext.getResources().getString(R.string.started_following_you));
-    hashMap.put("postId", "");
-    hashMap.put("post", false);
+    hashMap.put(SocifyUtils.EXTRA_USER_ID, firebaseUser.getUid());
+    hashMap.put(SocifyUtils.EXTRA_TEXT, mContext.getResources().getString(R.string.started_following_you));
+    hashMap.put(SocifyUtils.EXTRA_POST_ID, "");
+    hashMap.put(SocifyUtils.EXTRA_POST, false);
 
     reference.push().setValue(hashMap);
   }

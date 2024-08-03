@@ -32,12 +32,15 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.socify.app.R;
+import com.socify.app.models.Comment;
+import com.socify.app.models.Notification;
 import com.socify.app.ui.CommentsActivity;
 import com.socify.app.ui.FollowersActivity;
 import com.socify.app.ui.fragments.PostDetailFragment;
 import com.socify.app.ui.fragments.ProfileFragment;
-import com.socify.app.ui.models.Post;
-import com.socify.app.ui.models.User;
+import com.socify.app.models.Post;
+import com.socify.app.models.User;
+import com.socify.app.utils.SocifyUtils;
 
 import java.util.HashMap;
 import java.util.List;
@@ -86,8 +89,8 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
     holder.image_profile.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
-        SharedPreferences.Editor editor = mContext.getSharedPreferences("PREFS", Context.MODE_PRIVATE).edit();
-        editor.putString("profileId", post.getPublisher());
+        SharedPreferences.Editor editor = mContext.getSharedPreferences(SocifyUtils.PREFS, Context.MODE_PRIVATE).edit();
+        editor.putString(SocifyUtils.EXTRA_PROFILE_ID, post.getPublisher());
         editor.apply();
 
         ((FragmentActivity) mContext).getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
@@ -98,8 +101,8 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
     holder.publisher.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
-        SharedPreferences.Editor editor = mContext.getSharedPreferences("PREFS", Context.MODE_PRIVATE).edit();
-        editor.putString("profileId", post.getPublisher());
+        SharedPreferences.Editor editor = mContext.getSharedPreferences(SocifyUtils.PREFS, Context.MODE_PRIVATE).edit();
+        editor.putString(SocifyUtils.EXTRA_PROFILE_ID, post.getPublisher());
         editor.apply();
 
         ((FragmentActivity) mContext).getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
@@ -110,8 +113,8 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
     holder.username.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
-        SharedPreferences.Editor editor = mContext.getSharedPreferences("PREFS", Context.MODE_PRIVATE).edit();
-        editor.putString("profileId", post.getPublisher());
+        SharedPreferences.Editor editor = mContext.getSharedPreferences(SocifyUtils.PREFS, Context.MODE_PRIVATE).edit();
+        editor.putString(SocifyUtils.EXTRA_PROFILE_ID, post.getPublisher());
         editor.apply();
 
         ((FragmentActivity) mContext).getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
@@ -122,8 +125,8 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
     holder.post_image.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
-        SharedPreferences.Editor editor = mContext.getSharedPreferences("PREFS", Context.MODE_PRIVATE).edit();
-        editor.putString("postId", post.getPostId());
+        SharedPreferences.Editor editor = mContext.getSharedPreferences(SocifyUtils.PREFS, Context.MODE_PRIVATE).edit();
+        editor.putString(SocifyUtils.EXTRA_POST_ID, post.getPostId());
         editor.apply();
 
         ((FragmentActivity) mContext).getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
@@ -134,12 +137,12 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
     holder.like.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View view) {
-        if (holder.like.getTag().equals("like")) {
-          FirebaseDatabase.getInstance().getReference().child("Likes").child(post.getPostId())
+        if (holder.like.getTag().equals(SocifyUtils.TAG_LIKE)) {
+          FirebaseDatabase.getInstance().getReference().child(Post.LIKES_DB).child(post.getPostId())
             .child(firebaseUser.getUid()).setValue(true);
           addNotification(post.getPublisher(), post.getPostId());
         } else {
-          FirebaseDatabase.getInstance().getReference().child("Likes").child(post.getPostId())
+          FirebaseDatabase.getInstance().getReference().child(Post.LIKES_DB).child(post.getPostId())
             .child(firebaseUser.getUid()).removeValue();
         }
       }
@@ -149,9 +152,9 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
       @Override
       public void onClick(View v) {
         Intent intent = new Intent(mContext, FollowersActivity.class);
-        intent.putExtra("id", post.getPostId());
-        intent.putExtra("title", mContext.getResources().getString(R.string.likes));
-        intent.putExtra("tag", "likes");
+        intent.putExtra(SocifyUtils.EXTRA_ID, post.getPostId());
+        intent.putExtra(SocifyUtils.EXTRA_TITLE, mContext.getResources().getString(R.string.likes));
+        intent.putExtra(SocifyUtils.EXTRA_TAG, SocifyUtils.TAG_LIKES);
         mContext.startActivity(intent);
       }
     });
@@ -160,8 +163,8 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
       @Override
       public void onClick(View v) {
         Intent intent = new Intent(mContext, CommentsActivity.class);
-        intent.putExtra("postId", post.getPostId());
-        intent.putExtra("publisherId", post.getPublisher());
+        intent.putExtra(SocifyUtils.EXTRA_POST_ID, post.getPostId());
+        intent.putExtra(SocifyUtils.EXTRA_PUBLISHER_ID, post.getPublisher());
         mContext.startActivity(intent);
       }
     });
@@ -170,8 +173,8 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
       @Override
       public void onClick(View v) {
         Intent intent = new Intent(mContext, CommentsActivity.class);
-        intent.putExtra("postId", post.getPostId());
-        intent.putExtra("publisherId", post.getPublisher());
+        intent.putExtra(SocifyUtils.EXTRA_POST_ID, post.getPostId());
+        intent.putExtra(SocifyUtils.EXTRA_PUBLISHER_ID, post.getPublisher());
         mContext.startActivity(intent);
       }
     });
@@ -179,11 +182,11 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
     holder.save.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
-        if (holder.save.getTag().equals("save")) {
-          FirebaseDatabase.getInstance().getReference().child("Saves").child(firebaseUser.getUid())
+        if (holder.save.getTag().equals(SocifyUtils.TAG_SAVE)) {
+          FirebaseDatabase.getInstance().getReference().child(Post.SAVES_DB).child(firebaseUser.getUid())
             .child(post.getPostId()).setValue(true);
         } else {
-          FirebaseDatabase.getInstance().getReference().child("Saves").child(firebaseUser.getUid())
+          FirebaseDatabase.getInstance().getReference().child(Post.SAVES_DB).child(firebaseUser.getUid())
             .child(post.getPostId()).removeValue();
         }
       }
@@ -201,7 +204,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
                 editPost(post.getPostId());
                 return true;
               case R.id.delete:
-                FirebaseDatabase.getInstance().getReference("Posts")
+                FirebaseDatabase.getInstance().getReference(Post.POSTS_DB)
                   .child(post.getPostId()).removeValue()
                   .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
@@ -261,7 +264,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
     final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
     DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
-      .child("Likes")
+      .child(Post.LIKES_DB)
       .child(postId);
 
     reference.addValueEventListener(new ValueEventListener() {
@@ -269,10 +272,10 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
       public void onDataChange(@NonNull DataSnapshot snapshot) {
         if (snapshot.child(firebaseUser.getUid()).exists()) {
           imageView.setImageResource(R.drawable.ic_liked);
-          imageView.setTag("liked");
+          imageView.setTag(SocifyUtils.TAG_LIKED);
         } else {
           imageView.setImageResource(R.drawable.ic_thumb_up);
-          imageView.setTag("like");
+          imageView.setTag(SocifyUtils.TAG_LIKE);
         }
       }
 
@@ -284,7 +287,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
   }
 
   private void nrLikes(final TextView likes, String postId) {
-    DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("Likes")
+    DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child(Post.LIKES_DB)
       .child(postId);
     reference.addValueEventListener(new ValueEventListener() {
       @Override
@@ -300,7 +303,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
   }
 
   private void getComments(String postId, final TextView comments) {
-    DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Comments").child(postId);
+    DatabaseReference reference = FirebaseDatabase.getInstance().getReference(Comment.COMMENTS_DB).child(postId);
 
     reference.addValueEventListener(new ValueEventListener() {
       @Override
@@ -316,7 +319,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
   }
 
   private void publisherInfo(final ImageView image_profile, final TextView username, final TextView publisher, final String userId) {
-    DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users").child(userId);
+    DatabaseReference reference = FirebaseDatabase.getInstance().getReference(User.USERS_DB).child(userId);
 
     reference.addValueEventListener(new ValueEventListener() {
       @Override
@@ -337,7 +340,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
   private void isSaved(final String postId, ImageView imageView) {
     FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
-    DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("Saves")
+    DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child(Post.SAVES_DB)
       .child(firebaseUser.getUid());
 
     reference.addValueEventListener(new ValueEventListener() {
@@ -345,10 +348,10 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
       public void onDataChange(@NonNull DataSnapshot snapshot) {
         if (snapshot.child(postId).exists()) {
           imageView.setImageResource(R.drawable.ic_save_black);
-          imageView.setTag("saved");
+          imageView.setTag(SocifyUtils.TAG_SAVED);
         } else {
           imageView.setImageResource(R.drawable.ic_save);
-          imageView.setTag("save");
+          imageView.setTag(SocifyUtils.TAG_SAVE);
         }
       }
 
@@ -360,13 +363,15 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
   }
 
   private void addNotification(String userId, String postId) {
-    DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Notifications").child(userId);
+    DatabaseReference reference = FirebaseDatabase.getInstance()
+      .getReference(Notification.NOTIFICATIONS_DB)
+      .child(userId);
 
     HashMap<String, Object> hashMap = new HashMap<>();
-    hashMap.put("userId", firebaseUser.getUid());
-    hashMap.put("text", mContext.getResources().getString(R.string.liked_your_post));
-    hashMap.put("postId", postId);
-    hashMap.put("post", true);
+    hashMap.put(SocifyUtils.EXTRA_USER_ID, firebaseUser.getUid());
+    hashMap.put(SocifyUtils.EXTRA_TEXT, mContext.getResources().getString(R.string.liked_your_post));
+    hashMap.put(SocifyUtils.EXTRA_POST_ID, postId);
+    hashMap.put(SocifyUtils.EXTRA_POST, true);
 
     reference.push().setValue(hashMap);
   }
@@ -390,9 +395,9 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
         @Override
         public void onClick(DialogInterface dialog, int which) {
           HashMap<String, Object> hashMap = new HashMap<>();
-          hashMap.put("description", editText.getText().toString());
+          hashMap.put(SocifyUtils.EXTRA_DESCRIPTION, editText.getText().toString());
 
-          FirebaseDatabase.getInstance().getReference("Posts")
+          FirebaseDatabase.getInstance().getReference(Post.POSTS_DB)
             .child(postId).updateChildren(hashMap);
         }
       });
@@ -407,7 +412,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
   }
 
   private void getText(String postId, final EditText editText) {
-    DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Posts")
+    DatabaseReference reference = FirebaseDatabase.getInstance().getReference(Post.POSTS_DB)
       .child(postId);
     reference.addListenerForSingleValueEvent(new ValueEventListener() {
       @Override

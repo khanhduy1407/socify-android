@@ -25,9 +25,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.socify.app.R;
+import com.socify.app.utils.SocifyUtils;
 import com.socify.app.ui.MainActivity;
-import com.socify.app.ui.models.Comment;
-import com.socify.app.ui.models.User;
+import com.socify.app.models.Comment;
+import com.socify.app.models.User;
 
 import java.util.List;
 
@@ -64,7 +65,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
       @Override
       public void onClick(View v) {
         Intent intent = new Intent(mContext, MainActivity.class);
-        intent.putExtra("publisherId", comment.getPublisher());
+        intent.putExtra(SocifyUtils.EXTRA_PUBLISHER_ID, comment.getPublisher());
         mContext.startActivity(intent);
       }
     });
@@ -73,7 +74,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
       @Override
       public void onClick(View v) {
         Intent intent = new Intent(mContext, MainActivity.class);
-        intent.putExtra("publisherId", comment.getPublisher());
+        intent.putExtra(SocifyUtils.EXTRA_PUBLISHER_ID, comment.getPublisher());
         mContext.startActivity(intent);
       }
     });
@@ -95,7 +96,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
             new DialogInterface.OnClickListener() {
               @Override
               public void onClick(DialogInterface dialog, int which) {
-                FirebaseDatabase.getInstance().getReference("Comments")
+                FirebaseDatabase.getInstance().getReference(Comment.COMMENTS_DB)
                   .child(postId).child(comment.getCommentId())
                   .removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
@@ -135,7 +136,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
   }
 
   private void getUserInfo(final ImageView imageView, final TextView fullname, String publisherId) {
-    DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users").child(publisherId);
+    DatabaseReference reference = FirebaseDatabase.getInstance().getReference(User.USERS_DB).child(publisherId);
 
     reference.addValueEventListener(new ValueEventListener() {
       @Override

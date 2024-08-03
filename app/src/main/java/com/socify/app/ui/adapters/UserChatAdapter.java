@@ -21,8 +21,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.socify.app.R;
 import com.socify.app.ui.MessageActivity;
-import com.socify.app.ui.models.Chat;
-import com.socify.app.ui.models.User;
+import com.socify.app.models.Chat;
+import com.socify.app.models.User;
+import com.socify.app.utils.SocifyUtils;
 
 import java.util.List;
 
@@ -54,7 +55,7 @@ public class UserChatAdapter extends RecyclerView.Adapter<UserChatAdapter.ViewHo
     Glide.with(mContext).load(user.getImageUrl()).into(holder.profile_image);
 
     if (isChat) {
-      if (user.getStatus() != null && user.getStatus().equals("online")) {
+      if (user.getStatus() != null && user.getStatus().equals(SocifyUtils.STATUS_ONLINE)) {
         holder.img_on.setVisibility(View.VISIBLE);
         holder.img_off.setVisibility(View.GONE);
       } else {
@@ -76,7 +77,7 @@ public class UserChatAdapter extends RecyclerView.Adapter<UserChatAdapter.ViewHo
       @Override
       public void onClick(View v) {
         Intent intent = new Intent(mContext, MessageActivity.class);
-        intent.putExtra("userId", user.getId());
+        intent.putExtra(SocifyUtils.EXTRA_USER_ID, user.getId());
         mContext.startActivity(intent);
       }
     });
@@ -107,7 +108,7 @@ public class UserChatAdapter extends RecyclerView.Adapter<UserChatAdapter.ViewHo
   private void lastMessage(String userId, TextView last_msg) {
     theLastMessage = "default";
     FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-    DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Chats");
+    DatabaseReference reference = FirebaseDatabase.getInstance().getReference(Chat.CHATS_DB);
 
     reference.addValueEventListener(new ValueEventListener() {
       @Override

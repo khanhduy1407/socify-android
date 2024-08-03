@@ -21,13 +21,13 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.socify.app.R;
-import com.socify.app.ui.MainActivity;
+import com.socify.app.models.User;
 import com.socify.app.ui.MainChatActivity;
 import com.socify.app.ui.PostActivity;
 import com.socify.app.ui.adapters.PostAdapter;
 import com.socify.app.ui.adapters.StoryAdapter;
-import com.socify.app.ui.models.Post;
-import com.socify.app.ui.models.Story;
+import com.socify.app.models.Post;
+import com.socify.app.models.Story;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -99,7 +99,7 @@ public class HomeFragment extends Fragment {
   private void checkFollowing() {
     followingList = new ArrayList<>();
 
-    DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Follow")
+    DatabaseReference reference = FirebaseDatabase.getInstance().getReference(User.FOLLOW_DB)
             .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
             .child("following");
 
@@ -123,7 +123,7 @@ public class HomeFragment extends Fragment {
   }
 
   private void readPosts() {
-    DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Posts");
+    DatabaseReference reference = FirebaseDatabase.getInstance().getReference(Post.POSTS_DB);
 
     reference.addValueEventListener(new ValueEventListener() {
       @Override
@@ -150,7 +150,7 @@ public class HomeFragment extends Fragment {
   }
 
   private void readStories() {
-    DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Stories");
+    DatabaseReference reference = FirebaseDatabase.getInstance().getReference(Story.STORIES_DB);
     reference.addValueEventListener(new ValueEventListener() {
       @Override
       public void onDataChange(@NonNull DataSnapshot dataSnapshot) {

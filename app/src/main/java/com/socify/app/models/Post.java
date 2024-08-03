@@ -1,6 +1,11 @@
-package com.socify.app.ui.models;
+package com.socify.app.models;
 
 public class Post {
+
+    public static final String POSTS_DB      = "Posts";
+    public static final String LIKES_DB      = "Likes";
+    public static final String SAVES_DB      = "Saves";
+    public static final String POSTS_STORAGE = "posts";
 
     private String postId;
     private String postImage;

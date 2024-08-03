@@ -28,8 +28,9 @@ import com.socify.app.R;
 import com.socify.app.SplashActivity;
 import com.socify.app.ui.fragments.ChatsFragment;
 import com.socify.app.ui.fragments.PeopleFragment;
-import com.socify.app.ui.models.Chat;
-import com.socify.app.ui.models.User;
+import com.socify.app.models.Chat;
+import com.socify.app.models.User;
+import com.socify.app.utils.SocifyUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -57,7 +58,7 @@ public class MainChatActivity extends AppCompatActivity {
     fullname = findViewById(R.id.fullname);
 
     firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-    reference = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.getUid());
+    reference = FirebaseDatabase.getInstance().getReference(User.USERS_DB).child(firebaseUser.getUid());
 
     reference.addValueEventListener(new ValueEventListener() {
       @Override
@@ -76,7 +77,7 @@ public class MainChatActivity extends AppCompatActivity {
     final TabLayout tabLayout = findViewById(R.id.tab_layout);
     final ViewPager viewPager = findViewById(R.id.view_pager);
 
-    reference = FirebaseDatabase.getInstance().getReference("Chats");
+    reference = FirebaseDatabase.getInstance().getReference(Chat.CHATS_DB);
     reference.addValueEventListener(new ValueEventListener() {
       @Override
       public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -163,10 +164,10 @@ public class MainChatActivity extends AppCompatActivity {
   }
 
   private void status(String status) {
-    reference = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.getUid());
+    reference = FirebaseDatabase.getInstance().getReference(User.USERS_DB).child(firebaseUser.getUid());
 
     HashMap<String, Object> hashMap = new HashMap<>();
-    hashMap.put("status", status);
+    hashMap.put(SocifyUtils.EXTRA_STATUS, status);
 
     reference.updateChildren(hashMap);
   }
@@ -174,12 +175,12 @@ public class MainChatActivity extends AppCompatActivity {
   @Override
   protected void onResume() {
     super.onResume();
-    status("online");
+    status(SocifyUtils.STATUS_ONLINE);
   }
 
   @Override
   protected void onPause() {
     super.onPause();
-    status("offline");
+    status(SocifyUtils.STATUS_OFFLINE);
   }
 }

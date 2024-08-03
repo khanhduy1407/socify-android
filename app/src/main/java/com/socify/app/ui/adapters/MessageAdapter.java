@@ -14,7 +14,7 @@ import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.socify.app.R;
-import com.socify.app.ui.models.Chat;
+import com.socify.app.models.Chat;
 
 import java.util.List;
 

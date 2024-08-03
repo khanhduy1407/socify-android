@@ -28,12 +28,14 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.socify.app.R;
+import com.socify.app.models.Notification;
 import com.socify.app.ui.EditProfileActivity;
 import com.socify.app.ui.FollowersActivity;
 import com.socify.app.ui.OptionsActivity;
 import com.socify.app.ui.adapters.MyPhotoAdapter;
-import com.socify.app.ui.models.Post;
-import com.socify.app.ui.models.User;
+import com.socify.app.models.Post;
+import com.socify.app.models.User;
+import com.socify.app.utils.SocifyUtils;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -67,8 +69,8 @@ public class ProfileFragment extends Fragment {
 
     firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
-    SharedPreferences prefs = getContext().getSharedPreferences("PREFS", Context.MODE_PRIVATE);
-    profileId = prefs.getString("profileId", "none");
+    SharedPreferences prefs = getContext().getSharedPreferences(SocifyUtils.PREFS, Context.MODE_PRIVATE);
+    profileId = prefs.getString(SocifyUtils.EXTRA_PROFILE_ID, "none");
 
     image_profile = view.findViewById(R.id.image_profile);
     options = view.findViewById(R.id.options);
@@ -119,9 +121,9 @@ public class ProfileFragment extends Fragment {
       @Override
       public void onClick(View v) {
         Intent intent = new Intent(getContext(), FollowersActivity.class);
-        intent.putExtra("id", profileId);
-        intent.putExtra("title", getContext().getResources().getString(R.string.followers));
-        intent.putExtra("tag", "followers");
+        intent.putExtra(SocifyUtils.EXTRA_ID, profileId);
+        intent.putExtra(SocifyUtils.EXTRA_TITLE, getContext().getResources().getString(R.string.followers));
+        intent.putExtra(SocifyUtils.EXTRA_TAG, SocifyUtils.TAG_FOLLOWERS);
         startActivity(intent);
       }
     });
@@ -130,9 +132,9 @@ public class ProfileFragment extends Fragment {
       @Override
       public void onClick(View v) {
         Intent intent = new Intent(getContext(), FollowersActivity.class);
-        intent.putExtra("id", profileId);
-        intent.putExtra("title", getContext().getResources().getString(R.string.following));
-        intent.putExtra("tag", "following");
+        intent.putExtra(SocifyUtils.EXTRA_ID, profileId);
+        intent.putExtra(SocifyUtils.EXTRA_TITLE, getContext().getResources().getString(R.string.following));
+        intent.putExtra(SocifyUtils.EXTRA_TAG, SocifyUtils.TAG_FOLLOWING);
         startActivity(intent);
       }
     });
@@ -153,16 +155,16 @@ public class ProfileFragment extends Fragment {
           startActivity(new Intent(getContext(), EditProfileActivity.class));
         } else if (btn.equals(getContext().getResources().getString(R.string.follow))) {
           // nút theo dõi
-          FirebaseDatabase.getInstance().getReference().child("Follow").child(firebaseUser.getUid())
+          FirebaseDatabase.getInstance().getReference().child(User.FOLLOW_DB).child(firebaseUser.getUid())
             .child("following").child(profileId).setValue(true);
-          FirebaseDatabase.getInstance().getReference().child("Follow").child(profileId)
+          FirebaseDatabase.getInstance().getReference().child(User.FOLLOW_DB).child(profileId)
             .child("followers").child(firebaseUser.getUid()).setValue(true);
           addNotification();
         } else if (btn.equals(getContext().getResources().getString(R.string.following))) {
           // nút đang theo dõi
-          FirebaseDatabase.getInstance().getReference().child("Follow").child(firebaseUser.getUid())
+          FirebaseDatabase.getInstance().getReference().child(User.FOLLOW_DB).child(firebaseUser.getUid())
             .child("following").child(profileId).removeValue();
-          FirebaseDatabase.getInstance().getReference().child("Follow").child(profileId)
+          FirebaseDatabase.getInstance().getReference().child(User.FOLLOW_DB).child(profileId)
             .child("followers").child(firebaseUser.getUid()).removeValue();
         }
       }
@@ -188,7 +190,7 @@ public class ProfileFragment extends Fragment {
   }
 
   private void userInfo() {
-    DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users").child(profileId);
+    DatabaseReference reference = FirebaseDatabase.getInstance().getReference(User.USERS_DB).child(profileId);
     reference.addValueEventListener(new ValueEventListener() {
       @Override
       public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -213,7 +215,7 @@ public class ProfileFragment extends Fragment {
 
   private void checkFollow() {
     DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
-      .child("Follow").child(firebaseUser.getUid()).child("following");
+      .child(User.FOLLOW_DB).child(firebaseUser.getUid()).child("following");
 
     reference.addValueEventListener(new ValueEventListener() {
       @Override
@@ -234,7 +236,7 @@ public class ProfileFragment extends Fragment {
 
   private void getFollowers() {
     DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
-      .child("Follow").child(profileId).child("followers");
+      .child(User.FOLLOW_DB).child(profileId).child("followers");
 
     reference.addValueEventListener(new ValueEventListener() {
       @Override
@@ -250,7 +252,7 @@ public class ProfileFragment extends Fragment {
 
 
     DatabaseReference reference1 = FirebaseDatabase.getInstance().getReference()
-      .child("Follow").child(profileId).child("following");
+      .child(User.FOLLOW_DB).child(profileId).child("following");
 
     reference1.addValueEventListener(new ValueEventListener() {
       @Override
@@ -266,7 +268,7 @@ public class ProfileFragment extends Fragment {
   }
 
   private void getNrPosts() {
-    DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Posts");
+    DatabaseReference reference = FirebaseDatabase.getInstance().getReference(Post.POSTS_DB);
 
     reference.addValueEventListener(new ValueEventListener() {
       @Override
@@ -290,7 +292,7 @@ public class ProfileFragment extends Fragment {
   }
 
   private void myPhotos() {
-    DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Posts");
+    DatabaseReference reference = FirebaseDatabase.getInstance().getReference(Post.POSTS_DB);
 
     reference.addValueEventListener(new ValueEventListener() {
       @Override
@@ -315,7 +317,7 @@ public class ProfileFragment extends Fragment {
 
   private void mySaves() {
     mySaves = new ArrayList<>();
-    DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Saves")
+    DatabaseReference reference = FirebaseDatabase.getInstance().getReference(Post.SAVES_DB)
       .child(firebaseUser.getUid());
 
     reference.addValueEventListener(new ValueEventListener() {
@@ -336,7 +338,7 @@ public class ProfileFragment extends Fragment {
   }
 
   private void readSaves() {
-    DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Posts");
+    DatabaseReference reference = FirebaseDatabase.getInstance().getReference(Post.POSTS_DB);
     reference.addValueEventListener(new ValueEventListener() {
       @Override
       public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -361,13 +363,15 @@ public class ProfileFragment extends Fragment {
   }
 
   private void addNotification() {
-    DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Notifications").child(profileId);
+    DatabaseReference reference = FirebaseDatabase.getInstance()
+      .getReference(Notification.NOTIFICATIONS_DB)
+      .child(profileId);
 
     HashMap<String, Object> hashMap = new HashMap<>();
-    hashMap.put("userId", firebaseUser.getUid());
-    hashMap.put("text", getContext().getResources().getString(R.string.started_following_you));
-    hashMap.put("postId", "");
-    hashMap.put("post", false);
+    hashMap.put(SocifyUtils.EXTRA_USER_ID, firebaseUser.getUid());
+    hashMap.put(SocifyUtils.EXTRA_TEXT, getContext().getResources().getString(R.string.started_following_you));
+    hashMap.put(SocifyUtils.EXTRA_POST_ID, "");
+    hashMap.put(SocifyUtils.EXTRA_POST, false);
 
     reference.push().setValue(hashMap);
   }

@@ -24,7 +24,7 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.socify.app.R;
 import com.socify.app.ui.adapters.UserChatAdapter;
-import com.socify.app.ui.models.User;
+import com.socify.app.models.User;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -70,7 +70,7 @@ public class PeopleFragment extends Fragment {
 
   private void searchUsers(String s) {
     FirebaseUser fUser = FirebaseAuth.getInstance().getCurrentUser();
-    Query query = FirebaseDatabase.getInstance().getReference("Users").orderByChild("username")
+    Query query = FirebaseDatabase.getInstance().getReference(User.USERS_DB).orderByChild("username")
       .startAt(s)
       .endAt(s+"\uf8ff");
 
@@ -101,7 +101,7 @@ public class PeopleFragment extends Fragment {
 
   private void readUsers() {
     final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-    DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users");
+    DatabaseReference reference = FirebaseDatabase.getInstance().getReference(User.USERS_DB);
 
     reference.addValueEventListener(new ValueEventListener() {
       @Override

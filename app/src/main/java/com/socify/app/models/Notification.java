@@ -1,6 +1,8 @@
-package com.socify.app.ui.models;
+package com.socify.app.models;
 
 public class Notification {
+
+  public static final String NOTIFICATIONS_DB = "Notifications";
 
   private String userId;
   private String text;

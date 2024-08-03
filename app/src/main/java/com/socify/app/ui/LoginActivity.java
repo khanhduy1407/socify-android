@@ -23,6 +23,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.socify.app.R;
+import com.socify.app.models.User;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -77,7 +78,7 @@ public class LoginActivity extends AppCompatActivity {
               @Override
               public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
-                  DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("Users")
+                  DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child(User.USERS_DB)
                     .child(auth.getCurrentUser().getUid());
 
                   reference.addValueEventListener(new ValueEventListener() {

@@ -1,6 +1,10 @@
-package com.socify.app.ui.models;
+package com.socify.app.models;
 
 public class User {
+
+  public static final String USERS_DB = "Users";
+  public static final String FOLLOW_DB = "Follow";
+  public static final String UPLOADS_STORAGE = "uploads";
 
   private String id;
   private String username;

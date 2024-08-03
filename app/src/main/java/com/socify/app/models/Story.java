@@ -1,6 +1,9 @@
-package com.socify.app.ui.models;
+package com.socify.app.models;
 
 public class Story {
+
+  public static final String STORIES_DB      = "Stories";
+  public static final String STORIES_STORAGE = "stories";
 
   private String storyId;
   private String userId;

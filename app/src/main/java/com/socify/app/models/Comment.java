@@ -1,6 +1,8 @@
-package com.socify.app.ui.models;
+package com.socify.app.models;
 
 public class Comment {
+
+  public static final String COMMENTS_DB = "Comments";
 
   private String commentId;
   private String comment;

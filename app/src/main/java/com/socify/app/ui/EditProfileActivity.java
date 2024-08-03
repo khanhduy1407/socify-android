@@ -32,7 +32,8 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
 import com.socify.app.R;
-import com.socify.app.ui.models.User;
+import com.socify.app.models.User;
+import com.socify.app.utils.SocifyUtils;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
@@ -64,9 +65,9 @@ public class EditProfileActivity extends AppCompatActivity {
     bio = findViewById(R.id.bio);
 
     firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-    storageRef = FirebaseStorage.getInstance().getReference("uploads");
+    storageRef = FirebaseStorage.getInstance().getReference(User.UPLOADS_STORAGE);
 
-    DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.getUid());
+    DatabaseReference reference = FirebaseDatabase.getInstance().getReference(User.USERS_DB).child(firebaseUser.getUid());
     reference.addValueEventListener(new ValueEventListener() {
       @Override
       public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -150,10 +151,10 @@ public class EditProfileActivity extends AppCompatActivity {
             Uri downloadUri = task.getResult();
             String myUrl = downloadUri.toString();
 
-            DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.getUid());
+            DatabaseReference reference = FirebaseDatabase.getInstance().getReference(User.USERS_DB).child(firebaseUser.getUid());
 
             HashMap<String, Object> hashMap = new HashMap<>();
-            hashMap.put("imageUrl", ""+myUrl);
+            hashMap.put(SocifyUtils.EXTRA_IMAGE_URL, ""+myUrl);
 
             reference.updateChildren(hashMap);
             pd.dismiss();
@@ -173,12 +174,12 @@ public class EditProfileActivity extends AppCompatActivity {
   }
 
   private void updateProfile(String fullname, String username, String bio) {
-    DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.getUid());
+    DatabaseReference reference = FirebaseDatabase.getInstance().getReference(User.USERS_DB).child(firebaseUser.getUid());
 
     HashMap<String, Object> hashMap = new HashMap<>();
-    hashMap.put("fullname", fullname);
-    hashMap.put("username", username);
-    hashMap.put("bio", bio);
+    hashMap.put(SocifyUtils.EXTRA_FULLNAME, fullname);
+    hashMap.put(SocifyUtils.EXTRA_USERNAME, username);
+    hashMap.put(SocifyUtils.EXTRA_BIO, bio);
 
     reference.updateChildren(hashMap);
   }

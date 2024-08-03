@@ -23,8 +23,9 @@ import com.google.firebase.database.ValueEventListener;
 import com.socify.app.R;
 import com.socify.app.ui.AddStoryActivity;
 import com.socify.app.ui.StoryActivity;
-import com.socify.app.ui.models.Story;
-import com.socify.app.ui.models.User;
+import com.socify.app.models.Story;
+import com.socify.app.models.User;
+import com.socify.app.utils.SocifyUtils;
 
 import java.util.List;
 
@@ -71,7 +72,7 @@ public class StoryAdapter extends RecyclerView.Adapter<StoryAdapter.ViewHolder> 
           myStory(holder.add_story_text, holder.story_plus, true);
         } else {
           Intent intent = new Intent(mContext, StoryActivity.class);
-          intent.putExtra("userId", story.getUserId());
+          intent.putExtra(SocifyUtils.EXTRA_USER_ID, story.getUserId());
           mContext.startActivity(intent);
         }
       }
@@ -108,7 +109,7 @@ public class StoryAdapter extends RecyclerView.Adapter<StoryAdapter.ViewHolder> 
   }
 
   private void userInfo(final ViewHolder viewHolder, final String userId, final int pos) {
-    DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users").child(userId);
+    DatabaseReference reference = FirebaseDatabase.getInstance().getReference(User.USERS_DB).child(userId);
     reference.addValueEventListener(new ValueEventListener() {
       @Override
       public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -128,7 +129,7 @@ public class StoryAdapter extends RecyclerView.Adapter<StoryAdapter.ViewHolder> 
   }
 
   private void myStory(final TextView textView, final ImageView imageView, final boolean click) {
-    DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Stories")
+    DatabaseReference reference = FirebaseDatabase.getInstance().getReference(Story.STORIES_DB)
       .child(FirebaseAuth.getInstance().getCurrentUser().getUid());
     reference.addListenerForSingleValueEvent(new ValueEventListener() {
       @Override
@@ -150,7 +151,7 @@ public class StoryAdapter extends RecyclerView.Adapter<StoryAdapter.ViewHolder> 
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                   Intent intent = new Intent(mContext, StoryActivity.class);
-                  intent.putExtra("userId", FirebaseAuth.getInstance().getCurrentUser().getUid());
+                  intent.putExtra(SocifyUtils.EXTRA_USER_ID, FirebaseAuth.getInstance().getCurrentUser().getUid());
                   mContext.startActivity(intent);
                   dialog.dismiss();
                 }
@@ -188,7 +189,7 @@ public class StoryAdapter extends RecyclerView.Adapter<StoryAdapter.ViewHolder> 
   }
 
   private void seenStory(final ViewHolder viewHolder, String userId) {
-    DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Stories")
+    DatabaseReference reference = FirebaseDatabase.getInstance().getReference(Story.STORIES_DB)
       .child(userId);
     reference.addValueEventListener(new ValueEventListener() {
       @Override

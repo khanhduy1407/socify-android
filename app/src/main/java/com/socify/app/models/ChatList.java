@@ -1,6 +1,8 @@
-package com.socify.app.ui.models;
+package com.socify.app.models;
 
 public class ChatList {
+
+  public static final String CHAT_LIST_DB = "ChatList";
 
   private String id;
 

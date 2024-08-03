@@ -14,7 +14,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.socify.app.R;
 import com.socify.app.ui.fragments.PostDetailFragment;
-import com.socify.app.ui.models.Post;
+import com.socify.app.models.Post;
+import com.socify.app.utils.SocifyUtils;
 
 import java.util.List;
 
@@ -44,8 +45,8 @@ public class MyPhotoAdapter extends RecyclerView.Adapter<MyPhotoAdapter.ViewHold
     holder.post_image.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
-        SharedPreferences.Editor editor = mContext.getSharedPreferences("PREFS", Context.MODE_PRIVATE).edit();
-        editor.putString("postId", post.getPostId());
+        SharedPreferences.Editor editor = mContext.getSharedPreferences(SocifyUtils.PREFS, Context.MODE_PRIVATE).edit();
+        editor.putString(SocifyUtils.EXTRA_POST_ID, post.getPostId());
         editor.apply();
 
         ((FragmentActivity) mContext).getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,

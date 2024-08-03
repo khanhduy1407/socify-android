@@ -21,6 +21,8 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.socify.app.R;
+import com.socify.app.models.User;
+import com.socify.app.utils.SocifyUtils;
 
 import java.util.HashMap;
 
@@ -88,15 +90,15 @@ public class RegisterActivity extends AppCompatActivity {
             FirebaseUser firebaseUser = auth.getCurrentUser();
             String userId = firebaseUser.getUid();
 
-            reference = FirebaseDatabase.getInstance().getReference().child("Users").child(userId);
+            reference = FirebaseDatabase.getInstance().getReference().child(User.USERS_DB).child(userId);
 
             HashMap<String, Object> hashMap = new HashMap<>();
-            hashMap.put("id", userId);
-            hashMap.put("username", username.toLowerCase());
-            hashMap.put("fullname", fullname);
-            hashMap.put("bio", "");
-            hashMap.put("imageUrl", "https://firebasestorage.googleapis.com/v0/b/socify-bef22.appspot.com/o/placeholder.png?alt=media&token=b6ea72a3-7dde-4e2d-ba56-9fe9db5b3a98");
-            hashMap.put("status", "offline");
+            hashMap.put(SocifyUtils.EXTRA_ID, userId);
+            hashMap.put(SocifyUtils.EXTRA_USERNAME, username.toLowerCase());
+            hashMap.put(SocifyUtils.EXTRA_FULLNAME, fullname);
+            hashMap.put(SocifyUtils.EXTRA_BIO, "");
+            hashMap.put(SocifyUtils.EXTRA_IMAGE_URL, "https://firebasestorage.googleapis.com/v0/b/socify-bef22.appspot.com/o/placeholder.png?alt=media&token=b6ea72a3-7dde-4e2d-ba56-9fe9db5b3a98");
+            hashMap.put(SocifyUtils.EXTRA_STATUS, "offline");
 
             reference.setValue(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
               @Override

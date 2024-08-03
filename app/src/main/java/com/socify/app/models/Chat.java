@@ -1,6 +1,8 @@
-package com.socify.app.ui.models;
+package com.socify.app.models;
 
 public class Chat {
+
+  public static final String CHATS_DB = "Chats";
 
   private String sender;
   private String receiver;

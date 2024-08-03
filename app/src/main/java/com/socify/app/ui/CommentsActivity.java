@@ -23,9 +23,11 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.socify.app.R;
+import com.socify.app.models.Notification;
 import com.socify.app.ui.adapters.CommentAdapter;
-import com.socify.app.ui.models.Comment;
-import com.socify.app.ui.models.User;
+import com.socify.app.models.Comment;
+import com.socify.app.models.User;
+import com.socify.app.utils.SocifyUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -52,12 +54,12 @@ public class CommentsActivity extends AppCompatActivity {
     setContentView(R.layout.activity_comments);
 
     Intent intent = getIntent();
-    postId = intent.getStringExtra("postId");
-    publisherId = intent.getStringExtra("publisherId");
+    postId = intent.getStringExtra(SocifyUtils.EXTRA_POST_ID);
+    publisherId = intent.getStringExtra(SocifyUtils.EXTRA_PUBLISHER_ID);
 
     Toolbar toolbar = findViewById(R.id.toolbar);
     setSupportActionBar(toolbar);
-    getSupportActionBar().setTitle("Comments");
+    getSupportActionBar().setTitle(Comment.COMMENTS_DB);
     getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     toolbar.setNavigationOnClickListener(new View.OnClickListener() {
       @Override
@@ -97,7 +99,7 @@ public class CommentsActivity extends AppCompatActivity {
   }
 
   private void readComments() {
-    DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Comments").child(postId);
+    DatabaseReference reference = FirebaseDatabase.getInstance().getReference(Comment.COMMENTS_DB).child(postId);
 
     reference.addValueEventListener(new ValueEventListener() {
       @Override
@@ -119,14 +121,14 @@ public class CommentsActivity extends AppCompatActivity {
   }
 
   private void addComment() {
-    DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Comments").child(postId);
+    DatabaseReference reference = FirebaseDatabase.getInstance().getReference(Comment.COMMENTS_DB).child(postId);
 
     String commentId = reference.push().getKey();
 
     HashMap<String, Object> hashMap = new HashMap<>();
-    hashMap.put("commentId", commentId);
-    hashMap.put("comment", add_comment.getText().toString());
-    hashMap.put("publisher", firebaseUser.getUid());
+    hashMap.put(SocifyUtils.EXTRA_COMMENT_ID, commentId);
+    hashMap.put(SocifyUtils.EXTRA_COMMENT, add_comment.getText().toString());
+    hashMap.put(SocifyUtils.EXTRA_PUBLISHER, firebaseUser.getUid());
 
     reference.child(commentId).setValue(hashMap);
     addNotification();
@@ -134,7 +136,7 @@ public class CommentsActivity extends AppCompatActivity {
   }
 
   private void getImage() {
-    DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.getUid());
+    DatabaseReference reference = FirebaseDatabase.getInstance().getReference(User.USERS_DB).child(firebaseUser.getUid());
 
     reference.addValueEventListener(new ValueEventListener() {
       @Override
@@ -151,13 +153,15 @@ public class CommentsActivity extends AppCompatActivity {
   }
 
   private void addNotification() {
-    DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Notifications").child(publisherId);
+    DatabaseReference reference = FirebaseDatabase.getInstance()
+      .getReference(Notification.NOTIFICATIONS_DB)
+      .child(publisherId);
 
     HashMap<String, Object> hashMap = new HashMap<>();
-    hashMap.put("userId", firebaseUser.getUid());
-    hashMap.put("text", getApplicationContext().getResources().getString(R.string.commented) + " " + add_comment.getText().toString());
-    hashMap.put("postId", postId);
-    hashMap.put("post", true);
+    hashMap.put(SocifyUtils.EXTRA_USER_ID, firebaseUser.getUid());
+    hashMap.put(SocifyUtils.EXTRA_TEXT, getApplicationContext().getResources().getString(R.string.commented) + " " + add_comment.getText().toString());
+    hashMap.put(SocifyUtils.EXTRA_POST_ID, postId);
+    hashMap.put(SocifyUtils.EXTRA_POST, true);
 
     reference.push().setValue(hashMap);
   }

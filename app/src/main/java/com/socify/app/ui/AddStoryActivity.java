@@ -24,6 +24,8 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
 import com.socify.app.R;
+import com.socify.app.models.Story;
+import com.socify.app.utils.SocifyUtils;
 import com.theartofdev.edmodo.cropper.CropImage;
 
 import java.util.HashMap;
@@ -40,7 +42,7 @@ public class AddStoryActivity extends AppCompatActivity {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_add_story);
 
-    storageReference = FirebaseStorage.getInstance().getReference("stories");
+    storageReference = FirebaseStorage.getInstance().getReference(Story.STORIES_STORAGE);
 
     CropImage.activity()
       .setAspectRatio(9, 16)
@@ -80,17 +82,17 @@ public class AddStoryActivity extends AppCompatActivity {
 
             String myId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
-            DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Stories").child(myId);
+            DatabaseReference reference = FirebaseDatabase.getInstance().getReference(Story.STORIES_DB).child(myId);
 
             String storyId = reference.push().getKey();
             long time_end = System.currentTimeMillis() + 86400000; // 1 day
 
             HashMap<String, Object> hashMap = new HashMap<>();
-            hashMap.put("imageUrl", myUrl);
-            hashMap.put("timeStart", ServerValue.TIMESTAMP);
-            hashMap.put("timeEnd", time_end);
-            hashMap.put("storyId", storyId);
-            hashMap.put("userId", myId);
+            hashMap.put(SocifyUtils.EXTRA_IMAGE_URL, myUrl);
+            hashMap.put(SocifyUtils.EXTRA_TIME_START, ServerValue.TIMESTAMP);
+            hashMap.put(SocifyUtils.EXTRA_TIME_END, time_end);
+            hashMap.put(SocifyUtils.EXTRA_STORY_ID, storyId);
+            hashMap.put(SocifyUtils.EXTRA_USER_ID, myId);
 
             reference.child(storyId).setValue(hashMap);
             pd.dismiss();

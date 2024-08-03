@@ -21,9 +21,10 @@ import com.google.firebase.database.ValueEventListener;
 import com.socify.app.R;
 import com.socify.app.ui.fragments.PostDetailFragment;
 import com.socify.app.ui.fragments.ProfileFragment;
-import com.socify.app.ui.models.Notification;
-import com.socify.app.ui.models.Post;
-import com.socify.app.ui.models.User;
+import com.socify.app.models.Notification;
+import com.socify.app.models.Post;
+import com.socify.app.models.User;
+import com.socify.app.utils.SocifyUtils;
 
 import java.util.List;
 
@@ -62,15 +63,15 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
     holder.itemView.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
-        SharedPreferences.Editor editor = mContext.getSharedPreferences("PREFS", Context.MODE_PRIVATE).edit();
+        SharedPreferences.Editor editor = mContext.getSharedPreferences(SocifyUtils.PREFS, Context.MODE_PRIVATE).edit();
         if (notification.isPost()) {
-          editor.putString("postId", notification.getPostId());
+          editor.putString(SocifyUtils.EXTRA_POST_ID, notification.getPostId());
           editor.apply();
 
           ((FragmentActivity) mContext).getSupportFragmentManager().beginTransaction()
             .replace(R.id.fragment_container, new PostDetailFragment()).commit();
         } else {
-          editor.putString("profileId", notification.getUserId());
+          editor.putString(SocifyUtils.EXTRA_PROFILE_ID, notification.getUserId());
           editor.apply();
 
           ((FragmentActivity) mContext).getSupportFragmentManager().beginTransaction()
@@ -101,7 +102,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
   }
 
   private void getUserInfo(final ImageView imageView, final TextView username, String publisherId) {
-    DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users").child(publisherId);
+    DatabaseReference reference = FirebaseDatabase.getInstance().getReference(User.USERS_DB).child(publisherId);
     reference.addValueEventListener(new ValueEventListener() {
       @Override
       public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -118,7 +119,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
   }
 
   private void getPostImage(final ImageView imageView, final String postId) {
-    DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Posts").child(postId);
+    DatabaseReference reference = FirebaseDatabase.getInstance().getReference(Post.POSTS_DB).child(postId);
     reference.addValueEventListener(new ValueEventListener() {
       @Override
       public void onDataChange(@NonNull DataSnapshot snapshot) {

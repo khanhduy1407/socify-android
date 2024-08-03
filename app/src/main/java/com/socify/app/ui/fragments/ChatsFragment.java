@@ -20,8 +20,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.socify.app.R;
 import com.socify.app.ui.adapters.UserChatAdapter;
-import com.socify.app.ui.models.ChatList;
-import com.socify.app.ui.models.User;
+import com.socify.app.models.ChatList;
+import com.socify.app.models.User;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,7 +51,7 @@ public class ChatsFragment extends Fragment {
 
     usersList = new ArrayList<>();
 
-    reference = FirebaseDatabase.getInstance().getReference("ChatList").child(fUser.getUid());
+    reference = FirebaseDatabase.getInstance().getReference(ChatList.CHAT_LIST_DB).child(fUser.getUid());
     reference.addValueEventListener(new ValueEventListener() {
       @Override
       public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -75,7 +75,7 @@ public class ChatsFragment extends Fragment {
 
   private void chatList() {
     mUsers = new ArrayList<>();
-    reference = FirebaseDatabase.getInstance().getReference("Users");
+    reference = FirebaseDatabase.getInstance().getReference(User.USERS_DB);
     reference.addValueEventListener(new ValueEventListener() {
       @Override
       public void onDataChange(@NonNull DataSnapshot dataSnapshot) {

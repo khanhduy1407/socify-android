@@ -20,7 +20,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.socify.app.R;
 import com.socify.app.ui.adapters.NotificationAdapter;
-import com.socify.app.ui.models.Notification;
+import com.socify.app.models.Notification;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -52,7 +52,9 @@ public class NotificationsFragment extends Fragment {
 
   private void readNotifications() {
     FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-    DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Notifications").child(firebaseUser.getUid());
+    DatabaseReference reference = FirebaseDatabase.getInstance()
+      .getReference(Notification.NOTIFICATIONS_DB)
+      .child(firebaseUser.getUid());
     reference.addValueEventListener(new ValueEventListener() {
       @Override
       public void onDataChange(@NonNull DataSnapshot dataSnapshot) {

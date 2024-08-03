@@ -20,7 +20,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.socify.app.R;
 import com.socify.app.ui.adapters.PostAdapter;
-import com.socify.app.ui.models.Post;
+import com.socify.app.models.Post;
+import com.socify.app.utils.SocifyUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,8 +38,8 @@ public class PostDetailFragment extends Fragment {
                            Bundle savedInstanceState) {
     View view = inflater.inflate(R.layout.fragment_post_detail, container, false);
 
-    SharedPreferences preferences = getContext().getSharedPreferences("PREFS", Context.MODE_PRIVATE);
-    postId = preferences.getString("postId", "none");
+    SharedPreferences preferences = getContext().getSharedPreferences(SocifyUtils.PREFS, Context.MODE_PRIVATE);
+    postId = preferences.getString(SocifyUtils.EXTRA_POST_ID, "none");
 
     recyclerView = view.findViewById(R.id.recycler_view);
     recyclerView.setHasFixedSize(true);
@@ -55,7 +56,7 @@ public class PostDetailFragment extends Fragment {
   }
 
   private void readPost() {
-    DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Posts").child(postId);
+    DatabaseReference reference = FirebaseDatabase.getInstance().getReference(Post.POSTS_DB).child(postId);
 
     reference.addValueEventListener(new ValueEventListener() {
       @Override

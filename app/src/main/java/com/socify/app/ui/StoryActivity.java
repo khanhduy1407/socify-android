@@ -22,8 +22,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.socify.app.R;
-import com.socify.app.ui.models.Story;
-import com.socify.app.ui.models.User;
+import com.socify.app.models.Story;
+import com.socify.app.models.User;
+import com.socify.app.utils.SocifyUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -81,7 +82,7 @@ public class StoryActivity extends AppCompatActivity implements StoriesProgressV
     r_seen.setVisibility(View.GONE);
     story_delete.setVisibility(View.GONE);
 
-    userId = getIntent().getStringExtra("userId");
+    userId = getIntent().getStringExtra(SocifyUtils.EXTRA_USER_ID);
 
     if (userId.equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
       r_seen.setVisibility(View.VISIBLE);
@@ -113,10 +114,10 @@ public class StoryActivity extends AppCompatActivity implements StoriesProgressV
       @Override
       public void onClick(View v) {
         Intent intent = new Intent(StoryActivity.this, FollowersActivity.class);
-        intent.putExtra("id", userId);
-        intent.putExtra("storyId", storyIds.get(counter));
-        intent.putExtra("title", getResources().getString(R.string.views));
-        intent.putExtra("tag", "story_views");
+        intent.putExtra(SocifyUtils.EXTRA_ID, userId);
+        intent.putExtra(SocifyUtils.EXTRA_STORY_ID, storyIds.get(counter));
+        intent.putExtra(SocifyUtils.EXTRA_TITLE, getResources().getString(R.string.views));
+        intent.putExtra(SocifyUtils.EXTRA_TAG, SocifyUtils.TAG_STORY_VIEWS);
         startActivity(intent);
       }
     });
@@ -124,7 +125,7 @@ public class StoryActivity extends AppCompatActivity implements StoriesProgressV
     story_delete.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Stories")
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference(Story.STORIES_DB)
           .child(userId).child(storyIds.get(counter));
         reference.removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
           @Override
@@ -183,7 +184,7 @@ public class StoryActivity extends AppCompatActivity implements StoriesProgressV
   private void getStories(String userId) {
     images = new ArrayList<>();
     storyIds = new ArrayList<>();
-    DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Stories")
+    DatabaseReference reference = FirebaseDatabase.getInstance().getReference(Story.STORIES_DB)
       .child(userId);
     reference.addListenerForSingleValueEvent(new ValueEventListener() {
       @Override
@@ -218,7 +219,7 @@ public class StoryActivity extends AppCompatActivity implements StoriesProgressV
   }
 
   private void userInfo(String userId) {
-    DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users")
+    DatabaseReference reference = FirebaseDatabase.getInstance().getReference(User.USERS_DB)
       .child(userId);
     reference.addListenerForSingleValueEvent(new ValueEventListener() {
       @Override
@@ -236,12 +237,12 @@ public class StoryActivity extends AppCompatActivity implements StoriesProgressV
   }
 
   private void addView(String storyId) {
-    FirebaseDatabase.getInstance().getReference("Stories").child(userId)
+    FirebaseDatabase.getInstance().getReference(Story.STORIES_DB).child(userId)
       .child(storyId).child("views").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(true);
   }
 
   private void seenNumber(String storyId) {
-    DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Stories")
+    DatabaseReference reference = FirebaseDatabase.getInstance().getReference(Story.STORIES_DB)
       .child(userId).child(storyId).child("views");
     reference.addListenerForSingleValueEvent(new ValueEventListener() {
       @Override

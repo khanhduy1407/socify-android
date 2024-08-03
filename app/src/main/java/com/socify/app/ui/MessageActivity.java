@@ -22,9 +22,11 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.socify.app.R;
+import com.socify.app.models.ChatList;
 import com.socify.app.ui.adapters.MessageAdapter;
-import com.socify.app.ui.models.Chat;
-import com.socify.app.ui.models.User;
+import com.socify.app.models.Chat;
+import com.socify.app.models.User;
+import com.socify.app.utils.SocifyUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -82,10 +84,10 @@ public class MessageActivity extends AppCompatActivity {
     btn_send = findViewById(R.id.btn_send);
 
     intent = getIntent();
-    userId = intent.getStringExtra("userId");
+    userId = intent.getStringExtra(SocifyUtils.EXTRA_USER_ID);
 
     fUser = FirebaseAuth.getInstance().getCurrentUser();
-    reference = FirebaseDatabase.getInstance().getReference("Users").child(userId);
+    reference = FirebaseDatabase.getInstance().getReference(User.USERS_DB).child(userId);
 
     btn_send.setOnClickListener(new View.OnClickListener() {
       @Override
@@ -120,7 +122,7 @@ public class MessageActivity extends AppCompatActivity {
   }
 
   private void seenMessage(String userId) {
-    reference = FirebaseDatabase.getInstance().getReference("Chats");
+    reference = FirebaseDatabase.getInstance().getReference(Chat.CHATS_DB);
     seenListener = reference.addValueEventListener(new ValueEventListener() {
       @Override
       public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -128,7 +130,7 @@ public class MessageActivity extends AppCompatActivity {
           Chat chat = snapshot.getValue(Chat.class);
           if (chat.getReceiver().equals(fUser.getUid()) && chat.getSender().equals(userId)) {
             HashMap<String, Object> hashMap = new HashMap<>();
-            hashMap.put("seen", true);
+            hashMap.put(SocifyUtils.EXTRA_SEEN, true);
             snapshot.getRef().updateChildren(hashMap);
           }
         }
@@ -145,16 +147,16 @@ public class MessageActivity extends AppCompatActivity {
     DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
 
     HashMap<String, Object> hashMap = new HashMap<>();
-    hashMap.put("sender", sender);
-    hashMap.put("receiver", receiver);
-    hashMap.put("message", message);
-    hashMap.put("seen", false);
+    hashMap.put(SocifyUtils.EXTRA_SENDER, sender);
+    hashMap.put(SocifyUtils.EXTRA_RECEIVER, receiver);
+    hashMap.put(SocifyUtils.EXTRA_MESSAGE, message);
+    hashMap.put(SocifyUtils.EXTRA_SEEN, false);
 
     reference.child("Chats").push().setValue(hashMap);
 
 
     // add user to chat fragment
-    final DatabaseReference chatRef = FirebaseDatabase.getInstance().getReference("ChatList")
+    final DatabaseReference chatRef = FirebaseDatabase.getInstance().getReference(ChatList.CHAT_LIST_DB)
       .child(fUser.getUid())
       .child(userId);
 
@@ -172,7 +174,7 @@ public class MessageActivity extends AppCompatActivity {
       }
     });
 
-    final DatabaseReference chatRefReceiver = FirebaseDatabase.getInstance().getReference("ChatList")
+    final DatabaseReference chatRefReceiver = FirebaseDatabase.getInstance().getReference(ChatList.CHAT_LIST_DB)
       .child(userId)
       .child(fUser.getUid());
 
@@ -194,7 +196,7 @@ public class MessageActivity extends AppCompatActivity {
   private void readMessages(String myId, String userId, String imageUrl) {
     mChats = new ArrayList<>();
 
-    reference = FirebaseDatabase.getInstance().getReference("Chats");
+    reference = FirebaseDatabase.getInstance().getReference(Chat.CHATS_DB);
     reference.addValueEventListener(new ValueEventListener() {
       @Override
       public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -219,10 +221,10 @@ public class MessageActivity extends AppCompatActivity {
   }
 
   private void status(String status) {
-    reference = FirebaseDatabase.getInstance().getReference("Users").child(fUser.getUid());
+    reference = FirebaseDatabase.getInstance().getReference(User.USERS_DB).child(fUser.getUid());
 
     HashMap<String, Object> hashMap = new HashMap<>();
-    hashMap.put("status", status);
+    hashMap.put(SocifyUtils.EXTRA_STATUS, status);
 
     reference.updateChildren(hashMap);
   }
@@ -230,13 +232,13 @@ public class MessageActivity extends AppCompatActivity {
   @Override
   protected void onResume() {
     super.onResume();
-    status("online");
+    status(SocifyUtils.STATUS_ONLINE);
   }
 
   @Override
   protected void onPause() {
     super.onPause();
     reference.removeEventListener(seenListener);
-    status("offline");
+    status(SocifyUtils.STATUS_OFFLINE);
   }
 }

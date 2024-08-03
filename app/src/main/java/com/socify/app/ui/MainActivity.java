@@ -17,6 +17,7 @@ import com.socify.app.ui.fragments.HomeFragment;
 import com.socify.app.ui.fragments.NotificationsFragment;
 import com.socify.app.ui.fragments.ProfileFragment;
 import com.socify.app.ui.fragments.SearchFragment;
+import com.socify.app.utils.SocifyUtils;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -36,10 +37,10 @@ public class MainActivity extends AppCompatActivity {
 
     Bundle intent = getIntent().getExtras();
     if (intent != null) {
-      String publisher = intent.getString("publisherId");
+      String publisher = intent.getString(SocifyUtils.EXTRA_PUBLISHER_ID);
 
-      SharedPreferences.Editor editor = getSharedPreferences("PREFS", MODE_PRIVATE).edit();
-      editor.putString("profileId", publisher);
+      SharedPreferences.Editor editor = getSharedPreferences(SocifyUtils.PREFS, MODE_PRIVATE).edit();
+      editor.putString(SocifyUtils.EXTRA_PROFILE_ID, publisher);
       editor.apply();
 
       getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ProfileFragment()).commit();
@@ -67,8 +68,8 @@ public class MainActivity extends AppCompatActivity {
             selectedFragment = new NotificationsFragment();
             break;
           case R.id.nav_profile:
-            SharedPreferences.Editor editor = getSharedPreferences("PREFS", MODE_PRIVATE).edit();
-            editor.putString("profileId", FirebaseAuth.getInstance().getCurrentUser().getUid());
+            SharedPreferences.Editor editor = getSharedPreferences(SocifyUtils.PREFS, MODE_PRIVATE).edit();
+            editor.putString(SocifyUtils.EXTRA_PROFILE_ID, FirebaseAuth.getInstance().getCurrentUser().getUid());
             editor.apply();
             selectedFragment = new ProfileFragment();
             break;
