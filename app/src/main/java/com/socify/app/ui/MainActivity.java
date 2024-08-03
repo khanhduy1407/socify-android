@@ -3,7 +3,9 @@ package com.socify.app.ui;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -23,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
 
   BottomNavigationView bottomNavigationView;
   Fragment selectedFragment = null;
+  boolean doubleBackToExitPressedOnce = false;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -82,4 +85,27 @@ public class MainActivity extends AppCompatActivity {
         return true;
       }
     };
+
+  @Override
+  public void onBackPressed() {
+    Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+    if (currentFragment instanceof HomeFragment) {
+      if (doubleBackToExitPressedOnce) {
+        super.onBackPressed();
+        return;
+      }
+
+      this.doubleBackToExitPressedOnce = true;
+      Toast.makeText(this, "Nhấn thêm lần nữa để thoát ứng dụng", Toast.LENGTH_SHORT).show();
+
+      new Handler().postDelayed(new Runnable() {
+        @Override
+        public void run() {
+          doubleBackToExitPressedOnce = false;
+        }
+      }, 2000);
+    } else {
+      bottomNavigationView.setSelectedItemId(R.id.nav_home);
+    }
+  }
 }
