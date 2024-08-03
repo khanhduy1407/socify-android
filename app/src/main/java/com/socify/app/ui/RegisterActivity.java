@@ -22,6 +22,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.socify.app.R;
 import com.socify.app.models.User;
+import com.socify.app.utils.SocifyPattern;
 import com.socify.app.utils.SocifyUtils;
 
 import java.util.HashMap;
@@ -60,10 +61,6 @@ public class RegisterActivity extends AppCompatActivity {
     register.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
-        pd = new ProgressDialog(RegisterActivity.this);
-        pd.setMessage("Please wait...");
-        pd.show();
-
         String str_username = username.getText().toString();
         String str_fullname = fullname.getText().toString();
         String str_email = email.getText().toString();
@@ -72,9 +69,17 @@ public class RegisterActivity extends AppCompatActivity {
         if (TextUtils.isEmpty(str_username) || TextUtils.isEmpty(str_fullname)
             || TextUtils.isEmpty(str_email) || TextUtils.isEmpty(str_password)) {
           Toast.makeText(RegisterActivity.this, "All fields are required!", Toast.LENGTH_SHORT).show();
+        } else if (!SocifyPattern.isValid(str_username, SocifyPattern.USERNAME)) {
+          Toast.makeText(RegisterActivity.this, "Username invalid", Toast.LENGTH_SHORT).show();
+        } else if (!SocifyPattern.isValid(str_email, SocifyPattern.EMAIL)) {
+          Toast.makeText(RegisterActivity.this, "Email invalid", Toast.LENGTH_SHORT).show();
         } else if (str_password.length() < 6) {
           Toast.makeText(RegisterActivity.this, "Password must have 6 characters", Toast.LENGTH_SHORT).show();
         } else {
+          pd = new ProgressDialog(RegisterActivity.this);
+          pd.setMessage("Please wait...");
+          pd.show();
+
           register(str_username, str_fullname, str_email, str_password);
         }
       }
