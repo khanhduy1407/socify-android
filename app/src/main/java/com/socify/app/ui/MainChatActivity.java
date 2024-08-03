@@ -129,6 +129,21 @@ public class MainChatActivity extends AppCompatActivity {
     return false;
   }
 
+  @Override
+  public void onBackPressed() {
+    TabLayout tabLayout = findViewById(R.id.tab_layout);
+    int currentTabIndex = tabLayout.getSelectedTabPosition();
+
+    if (currentTabIndex != 0) {
+      // Chuyển về tab đầu tiên
+      ViewPager viewPager = findViewById(R.id.view_pager);
+      viewPager.setCurrentItem(0);
+    } else {
+      super.onBackPressed();
+      finish();
+    }
+  }
+
   class ViewPagerAdapter extends FragmentPagerAdapter{
 
     private ArrayList<Fragment> fragments;
