@@ -59,4 +59,10 @@
   <string name="confirm">Xác nhận</string>
   <string name="this_user_has_been_deleted">Người dùng này đã bị xóa</string>
   <string name="you">Bạn</string>
+  <string name="unsent">Gỡ tin nhắn</string>
+  <string name="remove_for_me">Xóa ở phía tôi</string>
+  <string name="edit_message">Sửa tin nhắn</string>
+  <string name="edit_history">Lịch sử chỉnh sửa</string>
+  <string name="close">Đóng</string>
+  <string name="the_message_has_been_unsent">Tin nhắn đã được thu hồi</string>
 </resources>

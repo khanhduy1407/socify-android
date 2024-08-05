@@ -166,13 +166,16 @@ public class MessageActivity extends AppCompatActivity {
   private void sendMessage(String sender, String receiver, String message) {
     DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
 
+    String messageId = reference.push().getKey();
+
     HashMap<String, Object> hashMap = new HashMap<>();
+    hashMap.put(SocifyUtils.EXTRA_ID, messageId);
     hashMap.put(SocifyUtils.EXTRA_SENDER, sender);
     hashMap.put(SocifyUtils.EXTRA_RECEIVER, receiver);
     hashMap.put(SocifyUtils.EXTRA_MESSAGE, message);
     hashMap.put(SocifyUtils.EXTRA_SEEN, false);
 
-    reference.child("Chats").push().setValue(hashMap);
+    reference.child("Chats").child(messageId).setValue(hashMap);
 
 
     // add user to chat fragment

@@ -27,6 +27,9 @@ public class SocifyUtils {
   public static final String EXTRA_SENDER           = "sender";
   public static final String EXTRA_RECEIVER         = "receiver";
   public static final String EXTRA_MESSAGE          = "message";
+  public static final String EXTRA_EDITED           = "edited";
+  public static final String EXTRA_EDIT_HISTORY     = "editHistory";
+  public static final String EXTRA_HIDE_FOR         = "hideFor";
   public static final String EXTRA_SEEN             = "seen";
   public static final String EXTRA_STATUS           = "status";
   public static final String EXTRA_ID               = "id";

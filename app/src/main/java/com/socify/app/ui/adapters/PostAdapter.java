@@ -196,6 +196,13 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
       @Override
       public void onClick(View v) {
         PopupMenu popupMenu = new PopupMenu(mContext, v);
+        popupMenu.inflate(R.menu.post_menu);
+
+        if (!post.getPublisher().equals(firebaseUser.getUid())) {
+          popupMenu.getMenu().findItem(R.id.edit).setVisible(false);
+          popupMenu.getMenu().findItem(R.id.delete).setVisible(false);
+        }
+
         popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
           @Override
           public boolean onMenuItemClick(MenuItem item) {
@@ -223,11 +230,6 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
             }
           }
         });
-        popupMenu.inflate(R.menu.post_menu);
-        if (!post.getPublisher().equals(firebaseUser.getUid())) {
-          popupMenu.getMenu().findItem(R.id.edit).setVisible(false);
-          popupMenu.getMenu().findItem(R.id.delete).setVisible(false);
-        }
         popupMenu.show();
       }
     });

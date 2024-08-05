@@ -126,9 +126,17 @@ public class UserChatAdapter extends RecyclerView.Adapter<UserChatAdapter.ViewHo
           if (chat.getReceiver().equals(firebaseUser.getUid()) && chat.getSender().equals(userId) ||
               chat.getReceiver().equals(userId) && chat.getSender().equals(firebaseUser.getUid())) {
             if (chat.getSender().equals(firebaseUser.getUid())) {
-              theLastMessage = mContext.getResources().getString(R.string.you) + ": " + chat.getMessage();
+              if (chat.getMessage().isEmpty()) {
+                theLastMessage = mContext.getResources().getString(R.string.you) + ": " + mContext.getResources().getString(R.string.the_message_has_been_unsent);
+              } else {
+                theLastMessage = mContext.getResources().getString(R.string.you) + ": " + chat.getMessage();
+              }
             } else {
-              theLastMessage = chat.getMessage();
+              if (chat.getMessage().isEmpty()) {
+                theLastMessage = mContext.getResources().getString(R.string.the_message_has_been_unsent);
+              } else {
+                theLastMessage = chat.getMessage();
+              }
             }
           }
         }

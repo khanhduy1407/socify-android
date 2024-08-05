@@ -59,4 +59,10 @@
   <string name="confirm">Confirm</string>
   <string name="this_user_has_been_deleted">This user has been deleted</string>
   <string name="you">You</string>
+  <string name="unsent">Unsent</string>
+  <string name="remove_for_me">Remove for me</string>
+  <string name="edit_message">Edit message</string>
+  <string name="edit_history">Edit history</string>
+  <string name="close">Close</string>
+  <string name="the_message_has_been_unsent">The message has been unsent</string>
 </resources>
