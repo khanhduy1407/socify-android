@@ -54,4 +54,7 @@
   <string name="no_message">Không có tin nhắn</string>
   <string name="pref_general_title">Cài đặt chung</string>
   <string name="pref_language">Ngôn ngữ</string>
+  <string name="delete_user">Xóa tài khoản</string>
+  <string name="confirm_password">Xác nhận Mật khẩu</string>
+  <string name="confirm">Xác nhận</string>
 </resources>

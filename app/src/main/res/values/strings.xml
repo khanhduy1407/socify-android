@@ -54,4 +54,7 @@
   <string name="no_message">No Message</string>
   <string name="pref_general_title">General settings</string>
   <string name="pref_language">Language</string>
+  <string name="delete_user">Delete user</string>
+  <string name="confirm_password">Confirm Password</string>
+  <string name="confirm">Confirm</string>
 </resources>

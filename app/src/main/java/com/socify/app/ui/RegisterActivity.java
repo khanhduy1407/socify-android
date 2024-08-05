@@ -102,8 +102,8 @@ public class RegisterActivity extends AppCompatActivity {
             hashMap.put(SocifyUtils.EXTRA_USERNAME, username.toLowerCase());
             hashMap.put(SocifyUtils.EXTRA_FULLNAME, fullname);
             hashMap.put(SocifyUtils.EXTRA_BIO, "");
-            hashMap.put(SocifyUtils.EXTRA_IMAGE_URL, "https://firebasestorage.googleapis.com/v0/b/socify-bef22.appspot.com/o/placeholder.png?alt=media&token=b6ea72a3-7dde-4e2d-ba56-9fe9db5b3a98");
-            hashMap.put(SocifyUtils.EXTRA_STATUS, "offline");
+            hashMap.put(SocifyUtils.EXTRA_IMAGE_URL, SocifyUtils.DATA_DEFAULT_IMAGE_URL);
+            hashMap.put(SocifyUtils.EXTRA_STATUS, SocifyUtils.STATUS_OFFLINE);
 
             reference.setValue(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
               @Override

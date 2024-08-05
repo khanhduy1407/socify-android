@@ -12,14 +12,16 @@ public class User {
   private String imageUrl;
   private String bio;
   private String status;
+  private boolean isDeleted;
 
-  public User(String id, String username, String fullname, String imageUrl, String bio, String status) {
+  public User(String id, String username, String fullname, String imageUrl, String bio, String status, boolean isDeleted) {
     this.id = id;
     this.username = username;
     this.fullname = fullname;
     this.imageUrl = imageUrl;
     this.bio = bio;
     this.status = status;
+    this.isDeleted = isDeleted;
   }
 
   public User () { }
@@ -70,5 +72,13 @@ public class User {
 
   public void setStatus(String status) {
     this.status = status;
+  }
+
+  public boolean isDeleted() {
+    return isDeleted;
+  }
+
+  public void setDeleted(boolean deleted) {
+    isDeleted = deleted;
   }
 }
