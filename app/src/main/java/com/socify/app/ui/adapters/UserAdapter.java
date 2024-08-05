@@ -63,7 +63,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
     viewHolder.btn_follow.setVisibility(View.VISIBLE);
 
     viewHolder.fullname.setText(user.getFullname());
-    viewHolder.username.setText(user.getUsername());
+    viewHolder.username.setText("@" + user.getUsername());
     Glide.with(mContext).load(user.getImageUrl()).into(viewHolder.image_profile);
     isFollowing(user.getId(), viewHolder.btn_follow);
 

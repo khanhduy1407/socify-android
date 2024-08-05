@@ -3,6 +3,7 @@
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
+  android:background="#e6e6e6"
   tools:context=".ui.fragments.HomeFragment">
 
   <com.google.android.material.appbar.AppBarLayout
@@ -63,7 +64,9 @@
         android:id="@+id/recycler_view_story"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="5dp" />
+        android:layout_marginBottom="5dp"
+        android:padding="5dp"
+        android:background="@color/white" />
 
       <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view"

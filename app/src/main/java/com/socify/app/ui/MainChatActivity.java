@@ -111,25 +111,6 @@ public class MainChatActivity extends AppCompatActivity {
   }
 
   @Override
-  public boolean onCreateOptionsMenu(Menu menu) {
-    getMenuInflater().inflate(R.menu.chat_menu, menu);
-    return true;
-  }
-
-  @Override
-  public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-    switch (item.getItemId()) {
-      case R.id.logout:
-        FirebaseAuth.getInstance().signOut();
-        startActivity(new Intent(MainChatActivity.this, SplashActivity.class)
-          .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
-        return true;
-    }
-
-    return false;
-  }
-
-  @Override
   public void onBackPressed() {
     TabLayout tabLayout = findViewById(R.id.tab_layout);
     int currentTabIndex = tabLayout.getSelectedTabPosition();

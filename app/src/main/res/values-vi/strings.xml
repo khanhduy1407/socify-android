@@ -57,5 +57,6 @@
   <string name="delete_user">Xóa tài khoản</string>
   <string name="confirm_password">Xác nhận Mật khẩu</string>
   <string name="confirm">Xác nhận</string>
-  <string name="this_user_has_been_deleted">This user has been deleted</string>
+  <string name="this_user_has_been_deleted">Người dùng này đã bị xóa</string>
+  <string name="you">Bạn</string>
 </resources>

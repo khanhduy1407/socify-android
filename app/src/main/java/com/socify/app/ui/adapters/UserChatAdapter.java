@@ -55,22 +55,30 @@ public class UserChatAdapter extends RecyclerView.Adapter<UserChatAdapter.ViewHo
     Glide.with(mContext).load(user.getImageUrl()).into(holder.profile_image);
 
     if (isChat) {
-      if (user.getStatus() != null && user.getStatus().equals(SocifyUtils.STATUS_ONLINE)) {
-        holder.img_on.setVisibility(View.VISIBLE);
-        holder.img_off.setVisibility(View.GONE);
+      if (!user.isDeleted()) {
+        if (user.getStatus() != null && user.getStatus().equals(SocifyUtils.STATUS_ONLINE)) {
+          holder.img_status.setBackground(mContext.getDrawable(R.drawable.ic_status_online));
+        } else {
+          holder.img_status.setBackground(mContext.getDrawable(R.drawable.ic_status_offline));
+        }
       } else {
-        holder.img_on.setVisibility(View.GONE);
-        holder.img_off.setVisibility(View.VISIBLE);
+        holder.img_status.setBackground(mContext.getDrawable(R.drawable.ic_status_deleted));
       }
+      holder.img_status.setVisibility(View.VISIBLE);
     } else {
-      holder.img_on.setVisibility(View.GONE);
-      holder.img_off.setVisibility(View.GONE);
+      holder.img_status.setVisibility(View.GONE);
     }
 
     if (isChat) {
+      holder.username.setVisibility(View.GONE);
+      holder.last_msg.setVisibility(View.VISIBLE);
+
       lastMessage(user.getId(), holder.last_msg);
     } else {
+      holder.username.setVisibility(View.VISIBLE);
       holder.last_msg.setVisibility(View.GONE);
+
+      holder.username.setText("@" + user.getUsername());
     }
 
     holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -90,16 +98,16 @@ public class UserChatAdapter extends RecyclerView.Adapter<UserChatAdapter.ViewHo
 
   public class ViewHolder extends RecyclerView.ViewHolder {
 
-    public ImageView profile_image, img_on, img_off;
-    public TextView fullname, last_msg;
+    public ImageView profile_image, img_status, img_off;
+    public TextView fullname, username, last_msg;
 
     public ViewHolder(@NonNull View itemView) {
       super(itemView);
 
       profile_image = itemView.findViewById(R.id.profile_image);
       fullname = itemView.findViewById(R.id.fullname);
-      img_on = itemView.findViewById(R.id.img_on);
-      img_off = itemView.findViewById(R.id.img_off);
+      username = itemView.findViewById(R.id.username);
+      img_status = itemView.findViewById(R.id.img_status);
       last_msg = itemView.findViewById(R.id.last_msg);
     }
   }
@@ -117,7 +125,11 @@ public class UserChatAdapter extends RecyclerView.Adapter<UserChatAdapter.ViewHo
           Chat chat = snapshot.getValue(Chat.class);
           if (chat.getReceiver().equals(firebaseUser.getUid()) && chat.getSender().equals(userId) ||
               chat.getReceiver().equals(userId) && chat.getSender().equals(firebaseUser.getUid())) {
-            theLastMessage = chat.getMessage();
+            if (chat.getSender().equals(firebaseUser.getUid())) {
+              theLastMessage = mContext.getResources().getString(R.string.you) + ": " + chat.getMessage();
+            } else {
+              theLastMessage = chat.getMessage();
+            }
           }
         }
 

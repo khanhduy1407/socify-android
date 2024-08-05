@@ -42,8 +42,7 @@
     android:id="@+id/recycler_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_below="@id/appbar"
-    android:layout_above="@id/txt_user_deleted" />
+    android:layout_below="@id/appbar" />
 
   <TextView
     android:id="@+id/txt_user_deleted"

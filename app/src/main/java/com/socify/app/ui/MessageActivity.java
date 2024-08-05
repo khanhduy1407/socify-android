@@ -117,13 +117,19 @@ public class MessageActivity extends AppCompatActivity {
 
         readMessages(fUser.getUid(), userId, user.getImageUrl());
 
+        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) recyclerView.getLayoutParams();
         if (user.isDeleted()) {
           txt_user_deleted.setVisibility(View.VISIBLE);
           bottomLayout.setVisibility(View.GONE);
+
+          params.addRule(RelativeLayout.ABOVE, R.id.txt_user_deleted);
         } else {
           txt_user_deleted.setVisibility(View.GONE);
           bottomLayout.setVisibility(View.VISIBLE);
+
+          params.addRule(RelativeLayout.ABOVE, R.id.bottom);
         }
+        recyclerView.setLayoutParams(params);
       }
 
       @Override
