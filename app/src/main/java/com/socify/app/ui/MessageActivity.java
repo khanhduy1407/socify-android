@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -39,6 +40,9 @@ public class MessageActivity extends AppCompatActivity {
   CircleImageView profile_image;
   TextView fullname;
 
+  TextView txt_user_deleted;
+
+  RelativeLayout bottomLayout;
   EditText text_send;
   ImageButton btn_send;
 
@@ -80,6 +84,8 @@ public class MessageActivity extends AppCompatActivity {
 
     profile_image = findViewById(R.id.profile_image);
     fullname = findViewById(R.id.fullname);
+    txt_user_deleted = findViewById(R.id.txt_user_deleted);
+    bottomLayout = findViewById(R.id.bottom);
     text_send = findViewById(R.id.text_send);
     btn_send = findViewById(R.id.btn_send);
 
@@ -110,6 +116,14 @@ public class MessageActivity extends AppCompatActivity {
         Glide.with(getApplicationContext()).load(user.getImageUrl()).into(profile_image);
 
         readMessages(fUser.getUid(), userId, user.getImageUrl());
+
+        if (user.isDeleted()) {
+          txt_user_deleted.setVisibility(View.VISIBLE);
+          bottomLayout.setVisibility(View.GONE);
+        } else {
+          txt_user_deleted.setVisibility(View.GONE);
+          bottomLayout.setVisibility(View.VISIBLE);
+        }
       }
 
       @Override

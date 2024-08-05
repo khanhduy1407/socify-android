@@ -43,7 +43,24 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_below="@id/appbar"
-    android:layout_above="@id/bottom" />
+    android:layout_above="@id/txt_user_deleted" />
+
+  <TextView
+    android:id="@+id/txt_user_deleted"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_alignParentBottom="true"
+    android:layout_marginStart="8dp"
+    android:layout_marginEnd="8dp"
+    android:layout_marginBottom="10dp"
+    android:padding="5dp"
+    android:gravity="center"
+    android:background="@drawable/white_background_corner"
+    android:text="@string/this_user_has_been_deleted"
+    android:textSize="18sp"
+    android:textColor="@color/red"
+    android:textStyle="bold"
+    android:visibility="gone" />
 
   <RelativeLayout
     android:id="@+id/bottom"
