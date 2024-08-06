@@ -72,7 +72,14 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
   public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
     Chat chat = mChats.get(position);
 
-    Glide.with(mContext).load(imageUrl).into(holder.profile_image);
+    // Check if the current message is the first message or if the previous message was sent by a different user
+    if (position == 0 || !chat.getSender().equals(mChats.get(position - 1).getSender())) {
+      // Show the profile image
+      Glide.with(mContext).load(imageUrl).into(holder.profile_image);
+    } else {
+      // Hide the profile image
+      holder.profile_image.setVisibility(View.INVISIBLE);
+    }
 
     if (chat.getMessage().isEmpty()) {
       holder.show_message.setText(mContext.getResources().getString(R.string.the_message_has_been_unsent));
@@ -94,6 +101,23 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
       holder.itemView.setVisibility(View.GONE);
       holder.itemView.setLayoutParams(new RecyclerView.LayoutParams(0, 0));
     }
+
+    holder.show_message.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        if (holder.txt_seen.getVisibility() == View.GONE) {
+          holder.txt_seen.setVisibility(View.VISIBLE);
+          if (chat.isSeen()) {
+            holder.txt_seen.setText(mContext.getResources().getString(R.string.seen));
+          } else {
+            holder.txt_seen.setText(mContext.getResources().getString(R.string.delivered));
+          }
+        } else {
+          holder.txt_seen.setVisibility(View.GONE);
+          holder.txt_seen.setText("");
+        }
+      }
+    });
 
     holder.show_message.setOnLongClickListener(new View.OnLongClickListener() {
       @Override

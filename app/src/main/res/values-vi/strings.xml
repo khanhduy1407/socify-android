@@ -68,4 +68,5 @@
   <string name="hide_chat">Ẩn trò chuyện</string>
   <string name="hide_chat_message">Cuộc trò chuyện này chỉ tạm ẩn ở phía bạn, nội dung cuộc trò chuyện sẽ không bị xóa đi.</string>
   <string name="ok">Ok</string>
+  <string name="close_conversation">Đóng cuộc trò chuyện</string>
 </resources>

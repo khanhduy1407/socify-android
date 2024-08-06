@@ -106,7 +106,7 @@ public class UserChatAdapter extends RecyclerView.Adapter<UserChatAdapter.ViewHo
             @Override
             public boolean onMenuItemClick(MenuItem item) {
               switch (item.getItemId()) {
-                case R.id.delete:
+                case R.id.close_conversation:
                   hideChat(user.getId());
                   return true;
                 default:
@@ -155,6 +155,18 @@ public class UserChatAdapter extends RecyclerView.Adapter<UserChatAdapter.ViewHo
       public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
         for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
           Chat chat = snapshot.getValue(Chat.class);
+
+          boolean isHidden = false;
+
+          if (chat.getHideFor() != null) {
+            String hideFor = chat.getHideFor();
+            if (hideFor != null && hideFor.equals(firebaseUser.getUid())) {
+              isHidden = true;
+            }
+          }
+
+          if (isHidden) continue;
+
           if (chat.getReceiver().equals(firebaseUser.getUid()) && chat.getSender().equals(userId) ||
               chat.getReceiver().equals(userId) && chat.getSender().equals(firebaseUser.getUid())) {
             if (chat.getSender().equals(firebaseUser.getUid())) {
