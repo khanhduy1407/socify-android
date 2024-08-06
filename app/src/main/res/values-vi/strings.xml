@@ -65,4 +65,7 @@
   <string name="edit_history">Lịch sử chỉnh sửa</string>
   <string name="close">Đóng</string>
   <string name="the_message_has_been_unsent">Tin nhắn đã được thu hồi</string>
+  <string name="hide_chat">Ẩn trò chuyện</string>
+  <string name="hide_chat_message">Cuộc trò chuyện này chỉ tạm ẩn ở phía bạn, nội dung cuộc trò chuyện sẽ không bị xóa đi.</string>
+  <string name="ok">Ok</string>
 </resources>

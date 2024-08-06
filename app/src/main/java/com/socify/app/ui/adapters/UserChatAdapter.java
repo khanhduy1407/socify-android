@@ -1,14 +1,18 @@
 package com.socify.app.ui.adapters;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -20,6 +24,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.socify.app.R;
+import com.socify.app.models.ChatList;
 import com.socify.app.ui.MessageActivity;
 import com.socify.app.models.Chat;
 import com.socify.app.models.User;
@@ -89,6 +94,33 @@ public class UserChatAdapter extends RecyclerView.Adapter<UserChatAdapter.ViewHo
         mContext.startActivity(intent);
       }
     });
+
+    if (isChat) {
+      holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+        @Override
+        public boolean onLongClick(View v) {
+          PopupMenu popupMenu = new PopupMenu(mContext, v);
+          popupMenu.inflate(R.menu.chat_menu);
+
+          popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+              switch (item.getItemId()) {
+                case R.id.delete:
+                  hideChat(user.getId());
+                  return true;
+                default:
+                  return false;
+              }
+            }
+          });
+
+          popupMenu.show();
+
+          return false;
+        }
+      });
+    }
   }
 
   @Override
@@ -158,5 +190,31 @@ public class UserChatAdapter extends RecyclerView.Adapter<UserChatAdapter.ViewHo
         //
       }
     });
+  }
+
+  private void hideChat(String userId) {
+    FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+    DatabaseReference reference = FirebaseDatabase.getInstance()
+      .getReference(ChatList.CHAT_LIST_DB)
+      .child(firebaseUser.getUid())
+      .child(userId);
+
+    AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+    builder
+      .setTitle(mContext.getResources().getString(R.string.hide_chat))
+      .setMessage(mContext.getResources().getString(R.string.hide_chat_message))
+      .setPositiveButton(mContext.getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
+        @Override
+        public void onClick(DialogInterface dialog, int which) {
+          reference.removeValue();
+        }
+      })
+      .setNegativeButton(mContext.getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
+        @Override
+        public void onClick(DialogInterface dialog, int which) {
+          dialog.cancel();
+        }
+      });
+    builder.show();
   }
 }

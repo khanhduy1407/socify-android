@@ -65,4 +65,7 @@
   <string name="edit_history">Edit history</string>
   <string name="close">Close</string>
   <string name="the_message_has_been_unsent">The message has been unsent</string>
+  <string name="hide_chat">Hide chat</string>
+  <string name="hide_chat_message">This conversation is only temporarily hidden from your side, the conversation content will not be deleted.</string>
+  <string name="ok">Ok</string>
 </resources>
