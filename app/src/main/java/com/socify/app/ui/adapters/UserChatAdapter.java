@@ -130,7 +130,7 @@ public class UserChatAdapter extends RecyclerView.Adapter<UserChatAdapter.ViewHo
 
   public class ViewHolder extends RecyclerView.ViewHolder {
 
-    public ImageView profile_image, img_status, img_off;
+    public ImageView profile_image, img_status;
     public TextView fullname, username, last_msg;
 
     public ViewHolder(@NonNull View itemView) {
