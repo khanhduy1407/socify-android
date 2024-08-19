@@ -32,6 +32,7 @@ android {
 
 dependencies {
   implementation fileTree(include: ['*.jar'], dir: 'libs')
+  api project(':cropper')
   implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
   implementation 'androidx.activity:activity:1.9.1'
   implementation 'androidx.preference:preference:1.2.1'
@@ -41,7 +42,7 @@ dependencies {
 
   implementation 'de.hdodenhof:circleimageview:3.1.0'
   implementation 'com.github.bumptech.glide:glide:4.16.0'
-  implementation 'com.theartofdev.edmodo:android-image-cropper:2.8.0'
+//  implementation 'com.theartofdev.edmodo:android-image-cropper:2.8.0'
   implementation 'com.github.shts:StoriesProgressView:3.0.0'
 
   // Firebase

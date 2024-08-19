@@ -1,2 +1,3 @@
 rootProject.name = "Socify"
 include ':app'
+include ':cropper'
